@@ -1,0 +1,28 @@
+Active: 1
+
+PlatformSets:
+ - ondemand-ototo10
+
+DeployOTRSBranch: rel-10_0
+
+TestModes:
+ Merge:
+  PlatformSets:
+   - ondemand-merge-ototo10
+  DeployOTRSPackages:
+   - FAQ@rel-10_0
+   - TimeAccounting@rel-10_0
+   - Survey@rel-10_0
+   - SystemMonitoring@rel-10_0
+   - OTRSMasterSlave@rel-10_0
+   - ITSMCore@rel-10_0
+   - ITSMIncidentProblemManagement@rel-10_0
+   - ITSMConfigurationManagement@rel-10_0
+   - ITSMChangeManagement@rel-10_0
+   - ITSMServiceLevelManagement@rel-10_0
+   - ImportExport@rel-10_0
+   - OTRSBusiness@rel-10_0
+   - OTRSBusinessSeleniumTesting@master
+
+ Silent:
+  Active: 0
