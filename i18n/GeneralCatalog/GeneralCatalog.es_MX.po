@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeneralCatalog\n"
 "POT-Creation-Date: 2020-01-24 10:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2021-06-25 19:53+0000\n"
+"Last-Translator: Fredy Aragón <fredmac48@hotmail.com>\n"
+"Language-Team: Spanish (Mexico) <https://translate.otobo.org/projects/"
+"otobo10/generalcatalog/es_MX/>\n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Template: AAAGeneralCatalog
 msgid "Functionality"
@@ -24,15 +27,15 @@ msgstr ""
 
 #. Template: AdminGeneralCatalog
 msgid "Edit Item"
-msgstr ""
+msgstr "Editar artículo"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Class"
-msgstr ""
+msgstr "Agregar clase"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Item"
-msgstr ""
+msgstr "Agregar artículo"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Catalog Item"
@@ -53,26 +56,29 @@ msgstr "Editar artículo del catálogo"
 #. JS File: ITSM.GeneralCatalog
 msgid "Warning incident state can not be set to invalid."
 msgstr ""
+"Advertencia El estado del incidente no se puede establecer como inválido."
 
 #. SysConfig
 msgid "Comment 2"
-msgstr ""
+msgstr "Comentario 2"
 
 #. SysConfig
 msgid "Create and manage the General Catalog."
-msgstr "Crear y administrar el Catálogo General"
+msgstr "Crear y administrar el Catálogo General."
 
 #. SysConfig
 msgid "Define the general catalog comment 2."
-msgstr ""
+msgstr "Definir el comentario 2 del catálogo general."
 
 #. SysConfig
 msgid "Defines the URL JS Color Picker path."
-msgstr "Define la URL para el Selector de Color JS. "
+msgstr "Define la URL para el Selector de Color JS."
 
 #. SysConfig
 msgid "Frontend module registration for the AdminGeneralCatalog configuration in the admin area."
-msgstr "Registro del módulo de Frontend para la administración del catálogo general en el área de administración"
+msgstr ""
+"Registro del módulo de Frontend para la administración del catálogo general "
+"en el área de administración."
 
 #. SysConfig
 msgid "General Catalog"
@@ -80,13 +86,15 @@ msgstr "Catálogo General"
 
 #. SysConfig
 msgid "Parameters for the example comment 2 of the general catalog attributes."
-msgstr "Parámetros para el comentario de ejemplo 2 del catálogo general de atributos"
+msgstr ""
+"Parámetros para el comentario de ejemplo 2 del catálogo general de atributos."
 
 #. SysConfig
 msgid "Parameters for the example permission groups of the general catalog attributes."
-msgstr "Parámetros para el ejemplo de permisos de grupo del catálogo general de atributos"
+msgstr ""
+"Parámetros para el ejemplo de permisos de grupo del catálogo general de "
+"atributos."
 
 #. SysConfig
 msgid "Permission Group"
-msgstr ""
-
+msgstr "Permisos de grupo"
