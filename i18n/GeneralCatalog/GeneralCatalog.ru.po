@@ -2,13 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeneralCatalog\n"
 "POT-Creation-Date: 2020-01-24 10:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2022-05-27 03:10+0000\n"
+"Last-Translator: Philipp Kesler <philipp.kesler@hein.de>\n"
+"Language-Team: Russian <https://translate.otobo.org/projects/otobo10/"
+"generalcatalog/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Template: AAAGeneralCatalog
 msgid "Functionality"
@@ -20,19 +24,19 @@ msgstr "Управление Общим каталогом"
 
 #. Template: AdminGeneralCatalog
 msgid "Items in Class"
-msgstr ""
+msgstr "Элемент в классе"
 
 #. Template: AdminGeneralCatalog
 msgid "Edit Item"
-msgstr ""
+msgstr "Редактировать элемент"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Class"
-msgstr ""
+msgstr "Добавить класс"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Item"
-msgstr ""
+msgstr "Добавить элемент"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Catalog Item"
@@ -53,10 +57,12 @@ msgstr "Правка элемента каталога"
 #. JS File: ITSM.GeneralCatalog
 msgid "Warning incident state can not be set to invalid."
 msgstr ""
+"Предупреждение Состояние инцидента не может быть установлено на "
+"недействительное."
 
 #. SysConfig
 msgid "Comment 2"
-msgstr ""
+msgstr "Комментарий 2"
 
 #. SysConfig
 msgid "Create and manage the General Catalog."
@@ -64,7 +70,7 @@ msgstr "Создание и управление Общим каталогом"
 
 #. SysConfig
 msgid "Define the general catalog comment 2."
-msgstr ""
+msgstr "Определите комментарий 2 к общему каталогу."
 
 #. SysConfig
 msgid "Defines the URL JS Color Picker path."
@@ -88,5 +94,4 @@ msgstr "Параметры для примерных групповых прав
 
 #. SysConfig
 msgid "Permission Group"
-msgstr ""
-
+msgstr "Группа разрешений"
