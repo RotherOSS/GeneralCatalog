@@ -202,12 +202,12 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label class="Mandatory" for="ClassFilter"><span class="Marker">*</span>[% Translate("Filter items by class.") | html %]</label>
+                        <label class="Mandatory" for="GeneralCatalogClass"><span class="Marker">*</span>[% Translate("Filter items by class.") | html %]</label>
                         <div class="Field">
-                            [% Data.ClassFilterStrg %]
-                            <div id="ClassFilterError" class="TooltipErrorMessage"><p>[% Translate("This field is required.") | html %]</p></div>
-                            <div id="ClassFilterServerError" class="TooltipErrorMessage"><p>[% Translate(Data.ClassFilterServerErrorMessage) | html %]</p></div>
-                            <p class="FieldExplanation">[% Translate("Set a class to filter the items selectable in this field by.") | html %]</p>
+                            [% Data.GeneralCatalogClassStrg %]
+                            <div id="GeneralCatalogClassError" class="TooltipErrorMessage"><p>[% Translate("This field is required.") | html %]</p></div>
+                            <div id="GeneralCatalogClassServerError" class="TooltipErrorMessage"><p>[% Translate(Data.GeneralCatalogClassServerErrorMessage) | html %]</p></div>
+                            <p class="FieldExplanation">[% Translate("Set the general catalog class.") | html %]</p>
                         </div>
                         <div class="Clear"></div>
 

@@ -133,7 +133,7 @@ sub _AddAction {
 
     my $ParamObject = $Kernel::OM->Get('Kernel::System::Web::Request');
 
-    for my $Needed (qw(Name Label FieldOrder ClassFilter)) {
+    for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
         $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
         if ( !$GetParam{$Needed} ) {
             $Errors{ $Needed . 'ServerError' }        = 'ServerError';
@@ -224,7 +224,7 @@ sub _AddAction {
     my $FieldConfig = {
         PossibleNone => $GetParam{PossibleNone},
         Tooltip      => $GetParam{Tooltip},
-        ClassFilter  => $GetParam{ClassFilter},
+        Class        => $GetParam{GeneralCatalogClass},
         Multiselect  => $GetParam{Multiselect},
         MultiValue   => $GetParam{MultiValue},
     };
@@ -302,10 +302,10 @@ sub _Change {
     if ( IsHashRefWithData( $DynamicFieldData->{Config} ) ) {
 
         %Config = (
-            PossibleNone => $DynamicFieldData->{Config}->{PossibleNone},
-            ClassFilter  => $DynamicFieldData->{Config}->{ClassFilter},
-            Multiselect  => $DynamicFieldData->{Config}->{Multiselect},
-            MultiValue   => $DynamicFieldData->{Config}->{MultiValue},
+            PossibleNone        => $DynamicFieldData->{Config}->{PossibleNone},
+            GeneralCatalogClass => $DynamicFieldData->{Config}->{Class},
+            Multiselect         => $DynamicFieldData->{Config}->{Multiselect},
+            MultiValue          => $DynamicFieldData->{Config}->{MultiValue},
         );
 
     }
@@ -330,7 +330,7 @@ sub _ChangeAction {
 
     my $ParamObject = $Kernel::OM->Get('Kernel::System::Web::Request');
 
-    for my $Needed (qw(Name Label FieldOrder ClassFilter)) {
+    for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
         $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
         if ( !$GetParam{$Needed} ) {
             $Errors{ $Needed . 'ServerError' }        = 'ServerError';
@@ -376,7 +376,7 @@ sub _ChangeAction {
     for my $ConfigParam (
         qw(
             ObjectType ObjectTypeName FieldType FieldTypeName PossibleNone
-            ValidID Tooltip ClassFilter Multiselect MultiValue Namespace
+            ValidID Tooltip GeneralCatalogClass Multiselect MultiValue Namespace
         )
         )
     {
@@ -487,7 +487,7 @@ sub _ChangeAction {
     my $FieldConfig = {
         PossibleNone => $GetParam{PossibleNone},
         Tooltip      => $GetParam{Tooltip},
-        ClassFilter  => $GetParam{ClassFilter},
+        Class        => $GetParam{GeneralCatalogClass},
         Multiselect  => $GetParam{Multiselect},
         MultiValue   => $GetParam{MultiValue},
     };
@@ -644,10 +644,10 @@ sub _ShowScreen {
     my $ClassList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ClassList();
 
     # build group selection
-    my $ClassFilterStrg = $LayoutObject->BuildSelection(
+    my $GeneralCatalogClassStrg = $LayoutObject->BuildSelection(
         Data         => $ClassList,
-        Name         => 'ClassFilter',
-        SelectedID   => $Param{ClassFilter} || '0',
+        Name         => 'GeneralCatalogClass',
+        SelectedID   => $Param{GeneralCatalogClass} || '0',
         Class        => 'Modernize W50pc Validate_Required',
         Sort         => 'AlphanumericValue',
         PossibleNone => 0,
@@ -780,13 +780,13 @@ sub _ShowScreen {
         TemplateFile => 'AdminDynamicFieldGeneralCatalog',
         Data         => {
             %Param,
-            ValidityStrg          => $ValidityStrg,
-            DynamicFieldOrderStrg => $DynamicFieldOrderStrg,
-            ClassFilterStrg       => $ClassFilterStrg,
-            MultiValueStrg        => $MultiValueStrg,
-            PossibleNoneStrg      => $PossibleNoneStrg,
-            ReadonlyInternalField => $ReadonlyInternalField,
-            Tooltip               => $Tooltip,
+            ValidityStrg            => $ValidityStrg,
+            DynamicFieldOrderStrg   => $DynamicFieldOrderStrg,
+            GeneralCatalogClassStrg => $GeneralCatalogClassStrg,
+            MultiValueStrg          => $MultiValueStrg,
+            PossibleNoneStrg        => $PossibleNoneStrg,
+            ReadonlyInternalField   => $ReadonlyInternalField,
+            Tooltip                 => $Tooltip,
         }
     );
 

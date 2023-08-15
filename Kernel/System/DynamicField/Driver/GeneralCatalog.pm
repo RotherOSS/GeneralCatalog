@@ -133,7 +133,7 @@ sub DisplayValueRender {
     $Param{ValueMaxChars} ||= '';
 
     my $ItemList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
-        Class => $Param{DynamicFieldConfig}{Config}{ClassFilter},
+        Class => $Param{DynamicFieldConfig}{Config}{Class},
     );
 
     my @ReadableValues;
@@ -212,7 +212,7 @@ sub ReadableValueRender {
 
     # my $ClassList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ClassList();
     my $ItemList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
-        Class => $Param{DynamicFieldConfig}{Config}{ClassFilter},
+        Class => $Param{DynamicFieldConfig}{Config}{Class},
     );
 
     my @ReadableValues;
@@ -256,7 +256,7 @@ sub PossibleValuesGet {
     my %PossibleValues;
 
     my $ItemList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
-        Class => $Param{DynamicFieldConfig}{Config}{ClassFilter},
+        Class => $Param{DynamicFieldConfig}{Config}{Class},
     );
 
     %PossibleValues = (
