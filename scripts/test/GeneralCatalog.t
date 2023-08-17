@@ -18,7 +18,7 @@ use strict;
 use warnings;
 use utf8;
 
-use vars qw($Self);
+our $Self;
 
 # create local objects
 my $ConfigObject         = $Kernel::OM->Get('Kernel::Config');
