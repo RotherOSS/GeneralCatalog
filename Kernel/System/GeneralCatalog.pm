@@ -493,7 +493,7 @@ sub ItemAdd {
     if ($NoAdd) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
-            Message =>
+            Message  =>
                 "Can't add new item! General catalog item with same name already exists in this class.",
         );
         return;
@@ -633,7 +633,7 @@ sub ItemUpdate {
     if ( !$Update ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
-            Message =>
+            Message  =>
                 "Can't update item! General catalog item with same name already exists in this class.",
         );
         return;
