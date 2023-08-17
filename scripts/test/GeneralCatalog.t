@@ -18,6 +18,14 @@ use strict;
 use warnings;
 use utf8;
 
+# core modules
+
+# CPAN modules
+use Test2::V0;
+
+# OTOBO modules
+use Kernel::System::UnitTest::RegisterDriver;    # Set up $Kernel::OM and $main::Self
+
 our $Self;
 
 # create local objects
@@ -1086,6 +1094,4 @@ $ConfigObject->Set(
     Value => $GeneralCatalogPreferencesPermissionsOrg,
 );
 
-# cleanup is done by RestoreDatabase
-
-1;
+done_testing;
