@@ -14,6 +14,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 # --
 
+use v5.24;
 use strict;
 use warnings;
 use utf8;
@@ -24,10 +25,8 @@ use utf8;
 use Test2::V0;
 
 # OTOBO modules
-use Kernel::System::UnitTest::RegisterDriver;    # Set up $Kernel::OM and $main::Self
+use Kernel::System::UnitTest::RegisterOM;    # Set up $Kernel::OM
 use Kernel::System::UnitTest::Selenium;
-
-our $Self;
 
 # get selenium object
 my $Selenium = Kernel::System::UnitTest::Selenium->new( LogExecuteCommandActive => 1 );
@@ -93,9 +92,9 @@ $Selenium->RunTest(
         $Selenium->find_element("//button[\@value='Add'][\@type='submit']")->VerifiedClick();
 
         # verify that general catalog preference Comment2 is not present while invalid
-        $Self->True(
-            index( $Selenium->get_page_source(), "#Comment2" ) == -1,
-            "#Comment2 is not enabled!",
+        $Selenium->content_lacks(
+            '#Comment2',
+            '#Comment2 is not enabled!',
         );
 
         # get general catalog preference Comment2 default sysconfig
@@ -122,10 +121,7 @@ $Selenium->RunTest(
 
         # verify that general catalog preference Comment2 is present while valid
         my $Success = $Selenium->find_element( "#Comment2", 'css' )->is_enabled();
-        $Self->True(
-            $Success,
-            "#Comment2 is enabled!",
-        );
+        ok( $Success, "#Comment2 is enabled!" );
 
         # create real test catalog class
         my $CatalogClassDsc  = "CatalogClassDsc" . $Helper->GetRandomID();
@@ -165,7 +161,7 @@ $Selenium->RunTest(
             "//a[contains(\@href, \'Action=AdminGeneralCatalog;Subaction=ItemEdit;ItemID=$CatalogItemIDs[1]' )]"
         )->VerifiedClick();
 
-        $Self->Is(
+        is(
             $Selenium->find_element( '#Comment2', 'css' )->get_value(),
             'GeneralCatalogPreferencesGeneric Comment2',
             "#Comment2 stored value",
@@ -179,7 +175,7 @@ $Selenium->RunTest(
 
         # check updated Comment2 value
         $Selenium->find_element( $CatalogClassItem, 'link_text' )->VerifiedClick();
-        $Self->Is(
+        is(
             $Selenium->find_element( '#Comment2', 'css' )->get_value(),
             $UpdateComment2,
             "#Comment2 updated value",
@@ -199,9 +195,9 @@ $Selenium->RunTest(
         $Selenium->find_element("//button[\@value='Add'][\@type='submit']")->VerifiedClick();
 
         # verify that general catalog preference Permissions is not present while invalid
-        $Self->True(
-            index( $Selenium->get_page_source(), "#Permission_Search" ) == -1,
-            "#Permissions is not enabled!",
+        $Selenium->content_lacks(
+            '#Permission_Search',
+            '#Permissions is not enabled!',
         );
 
         # get general catalog preference Permission default sysconfig
@@ -228,10 +224,7 @@ $Selenium->RunTest(
 
         # verify that general catalog preference Permissions is present while valid
         $Success = $Selenium->find_element( "#Permission_Search", 'css' )->is_enabled();
-        $Self->True(
-            $Success,
-            "#Permissions is enabled!",
-        );
+        ok( $Success, "#Permissions is enabled!" );
 
         # get DB object
         my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
@@ -242,17 +235,11 @@ $Selenium->RunTest(
             $Success = $DBObject->Do(
                 SQL => "DELETE FROM general_catalog_preferences WHERE general_catalog_id = $CatalogItem",
             );
-            $Self->True(
-                $Success,
-                "CatalogItemID $CatalogItem preference - deleted",
-            );
+            ok( $Success, "CatalogItemID $CatalogItem preference - deleted" );
             $Success = $DBObject->Do(
                 SQL => "DELETE FROM general_catalog WHERE id = $CatalogItem",
             );
-            $Self->True(
-                $Success,
-                "CatalogItemID $CatalogItem - deleted",
-            );
+            ok( $Success, "CatalogItemID $CatalogItem - deleted", );
         }
 
         # clean up cache

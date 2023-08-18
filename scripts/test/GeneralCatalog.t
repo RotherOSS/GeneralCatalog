@@ -14,6 +14,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 # --
 
+use v5.24;
 use strict;
 use warnings;
 use utf8;
@@ -24,11 +25,9 @@ use utf8;
 use Test2::V0;
 
 # OTOBO modules
-use Kernel::System::UnitTest::RegisterDriver;    # Set up $Kernel::OM and $main::Self
+use Kernel::System::UnitTest::RegisterOM;    # Set up $Kernel::OM
 
-our $Self;
-
-# create local objects
+# create needed objects
 my $ConfigObject         = $Kernel::OM->Get('Kernel::Config');
 my $GeneralCatalogObject = $Kernel::OM->Get('Kernel::System::GeneralCatalog');
 my $UserObject           = $Kernel::OM->Get('Kernel::System::User');
@@ -529,10 +528,7 @@ for my $Item ( @{$ItemData} ) {
         # check if item was added successfully or not
         if ( $Item->{AddGet} ) {
 
-            $Self->True(
-                $ItemID,
-                "Test $TestCount: ItemAdd() - ItemKey: $ItemID",
-            );
+            ok( $ItemID, "Test $TestCount: ItemAdd() - ItemKey: $ItemID" );
 
             if ($ItemID) {
 
@@ -544,10 +540,7 @@ for my $Item ( @{$ItemData} ) {
             }
         }
         else {
-            $Self->False(
-                $ItemID,
-                "Test $TestCount: ItemAdd()",
-            );
+            ok( !$ItemID, "Test $TestCount: ItemAdd()" );
         }
 
         # get item data to check the values after creation of item using ItemId and UserID
@@ -558,7 +551,7 @@ for my $Item ( @{$ItemData} ) {
 
         # check item data after creation of item
         for my $ItemAttribute ( sort keys %{ $Item->{AddGet} } ) {
-            $Self->Is(
+            is(
                 $ItemGet->{$ItemAttribute},
                 $Item->{AddGet}->{$ItemAttribute},
                 "Test $TestCount: ItemGet() - Using ItemID and UserID - $ItemAttribute ",
@@ -573,7 +566,7 @@ for my $Item ( @{$ItemData} ) {
 
         # check item data after creation of item
         for my $ItemAttribute ( sort keys %{ $Item->{AddGet} } ) {
-            $Self->Is(
+            is(
                 $ItemGet->{$ItemAttribute},
                 $Item->{AddGet}->{$ItemAttribute},
                 "Test $TestCount: ItemGet() - Using Class and Name - $ItemAttribute ",
@@ -585,10 +578,7 @@ for my $Item ( @{$ItemData} ) {
 
         # check last item id variable
         if ( !$LastAddedItemID ) {
-            $Self->False(
-                1,
-                "Test $TestCount: NO LAST ITEM ID GIVEN",
-            );
+            fail("Test $TestCount: NO LAST ITEM ID GIVEN");
         }
 
         # update the item
@@ -599,14 +589,14 @@ for my $Item ( @{$ItemData} ) {
 
         # check if item was updated successfully or not
         if ( $Item->{UpdateGet} ) {
-            $Self->True(
+            ok(
                 $UpdateSucess,
                 "Test $TestCount: ItemUpdate() - ItemKey: $LastAddedItemID",
             );
         }
         else {
-            $Self->False(
-                $UpdateSucess,
+            ok(
+                !$UpdateSucess,
                 "Test $TestCount: ItemUpdate()",
             );
         }
@@ -619,7 +609,7 @@ for my $Item ( @{$ItemData} ) {
 
         # check item data after update
         for my $ItemAttribute ( sort keys %{ $Item->{UpdateGet} } ) {
-            $Self->Is(
+            is(
                 $ItemGet2->{$ItemAttribute},
                 $Item->{UpdateGet}->{$ItemAttribute},
                 "Test $TestCount: ItemGet() - $ItemAttribute",
@@ -638,7 +628,7 @@ for my $Item ( @{$ItemData} ) {
                 ItemID => $LastAddedItemID,
             );
 
-            $Self->True(
+            ok(
                 $Success,
                 "Test $TestCount: PreferencesSet() - $Key",
             );
@@ -653,13 +643,13 @@ for my $Item ( @{$ItemData} ) {
 
         for my $Key ( sort keys %{ $Item->{PreferencesGet} } ) {
             if ( $Item->{PreferencesGet}->{$Key} eq $Preferences{$Key} ) {
-                $Self->True(
+                ok(
                     1,
                     "Test $TestCount: PreferencesGet() - $Key",
                 );
             }
             else {
-                $Self->True(
+                ok(
                     0,
                     "Test $TestCount: PreferencesGet() - $Key",
                 );
@@ -706,7 +696,7 @@ for my $Class (@ExistingClasses) {
         $ClassCount = grep { $_ eq $Class } @{$ClassList1};
     }
 
-    $Self->Is(
+    is(
         $ClassCount,
         1,
         "Test $TestCount: ClassList() - $Class listed",
@@ -726,8 +716,8 @@ for my $Class (@NonExistingClasses) {
         Valid => 0,
     );
 
-    $Self->False(
-        $ItemList,
+    ok(
+        !$ItemList,
         "Test $TestCount: ItemList() - $Class not exists",
     );
 
@@ -750,7 +740,7 @@ for my $Class (@ExistingClasses) {
         $ListCount = keys %{$ItemList};
     }
 
-    $Self->Is(
+    is(
         $ListCount,
         $AddedItemCounter{$Class},
         "Test $TestCount: ItemList() - $Class correct number of items",
@@ -779,7 +769,7 @@ for my $Class (@ExistingClasses) {
         $ListCount = keys %{$ItemList};
     }
 
-    $Self->Is(
+    is(
         $ListCount,
         1,
         "Test $TestCount: ItemList() preferences (single hash entry) - $Class correct number of items",
@@ -808,7 +798,7 @@ for my $Class (@ExistingClasses) {
         $ListCount = keys %{$ItemList};
     }
 
-    $Self->Is(
+    is(
         $ListCount,
         2,
         "Test $TestCount: ItemList() preferences (array) - $Class correct number of items",
@@ -842,7 +832,7 @@ for my $Class (@ExistingClasses) {
         },
     );
 
-    $Self->Is(
+    is(
         $ItemList->{$ItemID},
         'Item Preferences',
         "Test $TestCount: ItemList() - Class $Class Preferences match",
@@ -861,8 +851,8 @@ for my $Class (@ExistingClasses) {
         },
     );
 
-    $Self->False(
-        $ItemList,
+    ok(
+        !$ItemList,
         "Test $TestCount: ItemList() - Class $Class Preferences not match after PreferencesSet Change"
     );
 
@@ -880,7 +870,7 @@ for my $Class (@ExistingClasses) {
 # Preferences test 2
 # ------------------------------------------------------------ #
 
-=pod
+=for never
 
 my %FunctionalityList1;
 map { $FunctionalityList1{$_} = 1 } @ExistingFunctionalities;
@@ -891,7 +881,7 @@ for my $Class (@ExistingClasses) {
         Class => $Class,
     );
 
-    $Self->True(
+    ok(
         $FunctionalityList && ref $FunctionalityList eq 'ARRAY',
         "Test $TestCount: FunctionalityList() - return a array reference",
     );
@@ -903,7 +893,7 @@ for my $Class (@ExistingClasses) {
     $TestCount++;
 }
 
-$Self->True(
+ok(
     !keys %FunctionalityList1,
     "Test $TestCount: FunctionalityList()",
 );
@@ -930,10 +920,8 @@ for my $Class (@ExistingClasses) {
     );
 
     if ( !$Success ) {
-        $Self->False(
-            1,
-            "Test $TestCount: ClassRename() - Rename failed",
-        );
+        fail("Test $TestCount: ClassRename() - Rename failed");
+
         next CLASS;
     }
 
@@ -949,10 +937,8 @@ for my $Class (@ExistingClasses) {
         || ref $NewItemList ne 'HASH'
         )
     {
-        $Self->False(
-            1,
-            "Test $TestCount: ClassRename() - ItemList failed",
-        );
+        fail("Test $TestCount: ClassRename() - ItemList failed");
+
         next CLASS;
     }
 
@@ -969,7 +955,7 @@ for my $Class (@ExistingClasses) {
         delete $NewItemList->{$OldKey};
     }
 
-    $Self->True(
+    ok(
         !keys %{$NewItemList},
         "Test $TestCount: ClassRename()",
     );
@@ -995,10 +981,8 @@ for my $Class (@ExistingClasses) {
     );
 
     if ( !$Success ) {
-        $Self->False(
-            1,
-            "Test $TestCount: ClassRename() - Rename failed",
-        );
+        fail( "Test $TestCount: ClassRename() - Rename failed", );
+
         next CLASS;
     }
 
@@ -1014,10 +998,8 @@ for my $Class (@ExistingClasses) {
         || ref $NewItemList ne 'HASH'
         )
     {
-        $Self->False(
-            1,
-            "Test $TestCount: ClassRename() - ItemList failed",
-        );
+        fail( "Test $TestCount: ClassRename() - ItemList failed", );
+
         next CLASS;
     }
 
@@ -1034,7 +1016,7 @@ for my $Class (@ExistingClasses) {
         delete $NewItemList->{$OldKey};
     }
 
-    $Self->True(
+    ok(
         !keys %{$NewItemList},
         "Test $TestCount: ClassRename()",
     );
@@ -1053,7 +1035,7 @@ for my $Class (@ExistingClasses) {
         ClassNew => $Class . 'RENAME2',
     );
 
-    $Self->True(
+    ok(
         $Success,
         "Test $TestCount: ClassRename() - oldname and newname identical",
     );
@@ -1080,8 +1062,8 @@ for my $Class (@ExistingClasses) {
         ClassNew => 'UnitTest::TestClass' . $ClassRand[2],
     );
 
-    $Self->False(
-        $Success,
+    ok(
+        !$Success,
         "Test $TestCount: ClassRename() - new class name already exists",
     );
 

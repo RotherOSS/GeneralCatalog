@@ -14,6 +14,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 # --
 
+use v5.24;
 use strict;
 use warnings;
 use utf8;
@@ -24,10 +25,8 @@ use utf8;
 use Test2::V0;
 
 # OTOBO modules
-use Kernel::System::UnitTest::RegisterDriver;    # Set up $Kernel::OM and $main::Self
+use Kernel::System::UnitTest::RegisterDriver;    # Set up $Kernel::OM
 use Kernel::System::UnitTest::Selenium;
-
-our $Self;
 
 my $Selenium = Kernel::System::UnitTest::Selenium->new( LogExecuteCommandActive => 1 );
 
@@ -70,7 +69,7 @@ $Selenium->RunTest(
         $Selenium->find_element( "#Submit", 'css' )->click();
         $Selenium->WaitFor( JavaScript => 'return $("#Name.Error").length' );
 
-        $Self->Is(
+        is(
             $Selenium->execute_script(
                 "return \$('#Name').hasClass('Error')"
             ),
@@ -91,8 +90,8 @@ $Selenium->RunTest(
         $Selenium->find_element("//a[contains(\@href, \'Action=AdminGeneralCatalog' )]")->VerifiedClick();
 
         # Check for created test catalog class in AdminGeneralCatalog screen and click on it.
-        $Self->True(
-            index( $Selenium->get_page_source(), $CatalogClassDsc ) > -1,
+        $Selenium->content_contains(
+            $CatalogClassDsc,
             "Created test catalog class $CatalogClassDsc - found",
         );
         $Selenium->find_element(
@@ -107,7 +106,7 @@ $Selenium->RunTest(
         $Selenium->find_element( "#Submit", 'css' )->click();
         $Selenium->WaitFor( JavaScript => 'return $("#Name.Error").length' );
 
-        $Self->Is(
+        is(
             $Selenium->execute_script(
                 "return \$('#Name').hasClass('Error')"
             ),
@@ -120,8 +119,8 @@ $Selenium->RunTest(
         $Selenium->find_element("//button[\@value='Submit'][\@type='submit']")->VerifiedClick();
 
         # Verify error message.
-        $Self->True(
-            index( $Selenium->get_page_source(), 'Need ItemID OR Class and Name!' ) > -1,
+        $Selenium->content_contains(
+            'Need ItemID OR Class and Name!',
             "Error message - displayed",
         );
 
@@ -150,8 +149,8 @@ $Selenium->RunTest(
         }
 
         # Check for created test catalog item and click on it.
-        $Self->True(
-            index( $Selenium->get_page_source(), $CatalogClassItem ) > -1,
+        $Selenium->content_contains(
+            $CatalogClassItem,
             "Created test catalog item $CatalogClassItem - found",
         );
         $Selenium->find_element(
@@ -159,12 +158,12 @@ $Selenium->RunTest(
         )->VerifiedClick();
 
         # Check new test catalog item values.
-        $Self->Is(
+        is(
             $Selenium->find_element( '#Name', 'css' )->get_value(),
             $CatalogClassItem,
             "#Name stored value",
         );
-        $Self->Is(
+        is(
             $Selenium->find_element( '#Comment', 'css' )->get_value(),
             "Selenium catalog item",
             "#Comment stored value",
@@ -179,12 +178,12 @@ $Selenium->RunTest(
 
         # Check edited test catalog item values.
         $Selenium->find_element( $EditCatalogClassItem, 'link_text' )->VerifiedClick();
-        $Self->Is(
+        is(
             $Selenium->find_element( '#Name', 'css' )->get_value(),
             $EditCatalogClassItem,
             "#Name updated value",
         );
-        $Self->Is(
+        is(
             $Selenium->find_element( '#Comment', 'css' )->get_value(),
             "Selenium catalog item edit",
             "#Comment updated value",
@@ -192,7 +191,7 @@ $Selenium->RunTest(
 
         # Click on 'cancel' and verify correct link.
         $Selenium->find_element( "Cancel", 'link_text' )->VerifiedClick();
-        $Self->True(
+        ok(
             $Selenium->find_element( $EditCatalogClassItem, 'link_text' ),
             "Cancel link is correct."
         );
@@ -203,7 +202,7 @@ $Selenium->RunTest(
             Name  => 'Warning',
         );
         my $WarningID = $ItemDataRef->{ItemID};
-        $Self->True(
+        ok(
             $WarningID,
             "Warning incident state ID - $WarningID",
         );
@@ -246,7 +245,7 @@ $Selenium->RunTest(
 
             my $WarningText = 'Warning incident state can not be set to invalid.';
 
-            $Self->True(
+            ok(
                 $Selenium->execute_script("return \$('.Dialog:contains(\"$WarningText\")').length;"),
                 "'$ButtonID' click - Warning dialog is found",
             );
@@ -275,11 +274,11 @@ $Selenium->RunTest(
             JavaScript => 'return typeof($) === "function" && $("#ValidID").length && $("#Functionality").length;'
         );
 
-        $Self->True(
+        ok(
             $Selenium->execute_script("return \$('#Functionality').val() == 'warning';"),
             "Incident State Type is set to 'warning'",
         );
-        $Self->True(
+        ok(
             $Selenium->execute_script("return \$('#ValidID').val() == '1';"),
             "ValidID is set to '1'",
         );
@@ -293,7 +292,7 @@ $Selenium->RunTest(
                 SQL  => "DELETE FROM general_catalog_preferences WHERE general_catalog_id = ?",
                 Bind => [ \$CatalogItem ],
             );
-            $Self->True(
+            ok(
                 $Success,
                 "CatalogItemID $CatalogItem preference - deleted",
             );
@@ -302,7 +301,7 @@ $Selenium->RunTest(
                 SQL  => "DELETE FROM general_catalog WHERE id = ?",
                 Bind => [ \$CatalogItem ],
             );
-            $Self->True(
+            ok(
                 $Success,
                 "CatalogItemID $CatalogItem - deleted",
             );
