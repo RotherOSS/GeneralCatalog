@@ -213,13 +213,12 @@ sub ItemList {
             Priority => 'error',
             Message  => 'Need Class!'
         );
+
         return;
     }
 
-    # set default value
-    if ( !defined $Param{Valid} ) {
-        $Param{Valid} = 1;
-    }
+    # per default only valid items are reported
+    my $OnlyValidItems = $Param{Valid} // 1;
 
     my $PreferencesCacheKey = '';
     my $PreferencesTable    = '';
@@ -260,44 +259,39 @@ sub ItemList {
     my @BIND = ( \$Param{Class}, @PreferencesBind );
 
     # add valid string to sql string
-    if ( $Param{Valid} ) {
+    if ($OnlyValidItems) {
         $SQL .= 'AND valid_id = 1 ';
     }
 
     # create cache key
-    my $CacheKey = 'ItemList::' . $Param{Class} . '####' . $Param{Valid} . '####' . $PreferencesCacheKey;
+    my $CacheKey = 'ItemList::' . $Param{Class} . '####' . $OnlyValidItems . '####' . $PreferencesCacheKey;
 
     # check if result is already cached
     my $Cache = $Kernel::OM->Get('Kernel::System::Cache')->Get(
         Type => $Self->{CacheType},
         Key  => $CacheKey,
     );
+
     return $Cache if $Cache;
 
     # ask database
-    $Kernel::OM->Get('Kernel::System::DB')->Prepare(
+    my %ID2Name = $Kernel::OM->Get('Kernel::System::DB')->SelectMapping(
         SQL  => $SQL,
         Bind => \@BIND,
     );
 
-    # fetch the result
-    my %Data;
-    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
-        $Data{ $Row[0] } = $Row[1];
-    }
-
     # just return without logging an error and without caching the empty result
-    return if !%Data;
+    return unless %ID2Name;
 
     # cache the result
     $Kernel::OM->Get('Kernel::System::Cache')->Set(
         Type  => $Self->{CacheType},
         TTL   => $Self->{CacheTTL},
         Key   => $CacheKey,
-        Value => \%Data,
+        Value => \%ID2Name,
     );
 
-    return \%Data;
+    return \%ID2Name;
 }
 
 =head2 ItemGet()
