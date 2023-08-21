@@ -176,14 +176,31 @@ sub ClassRename {
 =head2 ItemList()
 
 returns a list as a hash reference of one general catalog class
+The key is the class ID, the value is the class name.
 
-    my $HashRef = $GeneralCatalogObject->ItemList(
+When the parameter C<Valid> is set to a true value then only valid items are returned.
+This is the default. When C<Valid> is explicitly set to C<0> then invalid items
+are also returned.
+
+The parameter C<Preferences> allows to add further restrictions on the list.
+The restrictions are combined with 'AND' logic.
+
+    my $ItemList = $GeneralCatalogObject->ItemList(
         Class         => 'ITSM::Service::Type',
         Valid         => 0,                      # (optional) default 1
         Preferences   => {                       # (optional) default {}
             Permission => 2,                     # or whatever preferences can be used
         },
     );
+
+Returns:
+
+    my $ItemList = {
+        71 => 'End User Service',
+        72 => 'Front End',
+        73 => 'Back End',
+        ...
+    };
 
 =cut
 
