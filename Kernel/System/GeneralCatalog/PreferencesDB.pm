@@ -38,6 +38,7 @@ Kernel::System::GeneralCatalog::PreferencesDB - some preferences functions for g
 create an object
 
     use Kernel::System::ObjectManager;
+
     local $Kernel::OM = Kernel::System::ObjectManager->new();
     my $GeneralCatalogPreferencesDBObject = $Kernel::OM->Get('Kernel::System::GeneralCatalog::PreferencesDB');
 
@@ -47,8 +48,7 @@ sub new {
     my ( $Type, %Param ) = @_;
 
     # allocate new hash for object
-    my $Self = {};
-    bless( $Self, $Type );
+    my $Self = bless {}, $Type;
 
     # preferences table data
     $Self->{PreferencesTable}      = 'general_catalog_preferences';

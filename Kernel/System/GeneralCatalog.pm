@@ -50,8 +50,7 @@ sub new {
     my ( $Type, %Param ) = @_;
 
     # allocate new hash for object
-    my $Self = {};
-    bless( $Self, $Type );
+    my $Self = bless {}, $Type;
 
     # load generator preferences module
     my $GeneratorModule = $Kernel::OM->Get('Kernel::Config')->Get('GeneralCatalog::PreferencesModule')

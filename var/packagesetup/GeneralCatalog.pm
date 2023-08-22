@@ -33,8 +33,6 @@ var::packagesetup::GeneralCatalog - code to execute during package installation
 
 =head1 PUBLIC INTERFACE
 
-=cut
-
 =head2 new()
 
 create an object
@@ -236,7 +234,7 @@ sub _MigrateConfigs {
         };
     }
 
-    return 1 if !@NewSettings;
+    return 1 unless @NewSettings;
 
     # Write new setting.
     $SysConfigObject->SettingsSet(

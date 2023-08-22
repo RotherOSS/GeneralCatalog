@@ -36,9 +36,7 @@ use Kernel::System::VariableCheck qw(:all);
 
 our @ObjectDependencies = (
     'Kernel::Config',
-    'Kernel::System::DynamicFieldValue',
     'Kernel::System::GeneralCatalog',
-    'Kernel::System::Log',
     'Kernel::System::Main',
 );
 
@@ -48,7 +46,8 @@ Kernel::System::DynamicField::Driver::GeneralCatalog - driver for the GeneralCat
 
 =head1 DESCRIPTION
 
-DynamicFields GeneralCatalog Driver delegate.
+DynamicFields GeneralCatalog Driver delegate. This dynamic field driver gives access to the lists
+that are declared in the general catalog.
 
 =head1 PUBLIC INTERFACE
 
@@ -58,7 +57,7 @@ Please look there for a detailed reference of the functions.
 =head2 new()
 
 usually, you want to create an instance of this
-by using Kernel::System::DynamicField::Backend->new();
+by using C<Kernel::System::DynamicField::Backend->new()>.
 
 =cut
 
@@ -168,7 +167,7 @@ sub DisplayValueRender {
     }
 
     my $ValueSeparator;
-    my $Title = join( ', ', @ReadableTitles );
+    my $Title = join ', ', @ReadableTitles;
 
     # HTMLOutput transformations
     if ($HTMLOutput) {
@@ -176,7 +175,7 @@ sub DisplayValueRender {
             Text => $Title,
             Max  => $Param{TitleMaxChars} || '',
         );
-        $ValueSeparator = '<br/>';
+        $ValueSeparator = '<br>';
     }
     else {
         if ( $Param{TitleMaxChars} && length($Title) > $Param{TitleMaxChars} ) {
@@ -185,14 +184,11 @@ sub DisplayValueRender {
         $ValueSeparator = "\n";
     }
 
-    # this field type does not support the Link Feature
-    my $Link;
-
     # return a data structure
     return {
-        Value => '' . join( $ValueSeparator, @ReadableValues ),
-        Title => '' . $Title,
-        Link  => $Link,
+        Value => join( $ValueSeparator, @ReadableValues ),
+        Title => $Title,
+        Link  => undef,                                      # this field type does not support the Link Feature
     };
 }
 
@@ -254,17 +250,11 @@ sub ReadableValueRender {
 sub PossibleValuesGet {
     my ( $Self, %Param ) = @_;
 
-    # to store the possible values
-    my %PossibleValues;
-
     my $ItemList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
         Class => $Param{DynamicFieldConfig}{Config}{Class},
     );
 
-    %PossibleValues = (
-        %PossibleValues,
-        $ItemList->%*,
-    );
+    my %PossibleValues = $ItemList->%*;
 
     # set PossibleNone attribute
     my $FieldPossibleNone;
@@ -277,10 +267,7 @@ sub PossibleValuesGet {
 
     # set none value if defined on field config
     if ($FieldPossibleNone) {
-        %PossibleValues = (
-            %PossibleValues,
-            '' => '-',
-        );
+        $PossibleValues{''} = '-';
     }
 
     # return the possible values hash as a reference
