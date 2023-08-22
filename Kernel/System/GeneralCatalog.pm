@@ -78,16 +78,13 @@ sub ClassList {
     my ( $Self, %Param ) = @_;
 
     # ask database
-    $Kernel::OM->Get('Kernel::System::DB')->Prepare(
-        SQL => 'SELECT DISTINCT(general_catalog_class) '
-            . 'FROM general_catalog ORDER BY general_catalog_class',
+    my @ClassList = $Kernel::OM->Get('Kernel::System::DB')->SelectColArray(
+        SQL => <<'END_SQL',
+SELECT DISTINCT(general_catalog_class)
+  FROM general_catalog
+  ORDER BY general_catalog_class
+END_SQL
     );
-
-    # fetch the result
-    my @ClassList;
-    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
-        push @ClassList, $Row[0];
-    }
 
     # cache the result
     my $CacheKey = 'ClassList';

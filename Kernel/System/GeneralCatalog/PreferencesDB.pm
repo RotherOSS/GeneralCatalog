@@ -137,20 +137,15 @@ sub GeneralCatalogPreferencesGet {
         return;
     }
 
-    # get preferences
-    return if !$Kernel::OM->Get('Kernel::System::DB')->Prepare(
-        SQL => "SELECT $Self->{PreferencesTableKey}, $Self->{PreferencesTableValue} "
-            . " FROM $Self->{PreferencesTable} WHERE $Self->{PreferencesTableGcID} = ?",
+    # get preferences for that item
+    return $Kernel::OM->Get('Kernel::System::DB')->SelectMapping(
+        SQL => <<"END_SQL",
+SELECT $Self->{PreferencesTableKey}, $Self->{PreferencesTableValue}
+  FROM $Self->{PreferencesTable}
+  WHERE $Self->{PreferencesTableGcID} = ?
+END_SQL
         Bind => [ \$Param{ItemID} ],
     );
-
-    my %Data;
-    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
-        $Data{ $Row[0] } = $Row[1];
-    }
-
-    # return data
-    return %Data;
 }
 
 1;
