@@ -196,12 +196,12 @@ $Selenium->RunTest(
             "Cancel link is correct."
         );
 
-        # Get WarningID.
+        # Get WarningID. TODO: this works only when ITSMCore is already installed
         my $ItemDataRef = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemGet(
             Class => 'ITSM::Core::IncidentState',
             Name  => 'Warning',
         );
-        my $WarningID = $ItemDataRef->{ItemID};
+        my $WarningID = $ItemDataRef->{ItemID} // '';
         ok(
             $WarningID,
             "Warning incident state ID - $WarningID",
