@@ -276,8 +276,8 @@ sub ItemList {
         Bind => \@BIND,
     );
 
-    # just return without logging an error and without caching the empty result
-    return unless %ID2Name;
+    # return an empty mapping without logging an error and without caching the empty result
+    return {} unless %ID2Name;
 
     # cache the result
     $Kernel::OM->Get('Kernel::System::Cache')->Set(
