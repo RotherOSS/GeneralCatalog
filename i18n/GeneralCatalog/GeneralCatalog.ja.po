@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeneralCatalog\n"
 "POT-Creation-Date: 2020-01-24 10:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2023-08-24 16:35+0000\n"
+"Last-Translator: Kozo Sakurai <sakurai@io-architect.com>\n"
+"Language-Team: Japanese <https://translate.otobo.org/projects/otobo10/"
+"generalcatalog/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Template: AAAGeneralCatalog
 msgid "Functionality"
@@ -24,7 +27,7 @@ msgstr "クラス内のアイテム"
 
 #. Template: AdminGeneralCatalog
 msgid "Edit Item"
-msgstr ""
+msgstr "アイテムを修正"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Class"
@@ -32,7 +35,7 @@ msgstr "クラスの追加"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Item"
-msgstr ""
+msgstr "アイテムを追加"
 
 #. Template: AdminGeneralCatalog
 msgid "Add Catalog Item"
@@ -44,7 +47,7 @@ msgstr "カタログクラスを追加"
 
 #. Template: AdminGeneralCatalog
 msgid "Catalog Class"
-msgstr "カタログクラス"
+msgstr "クラスのカタログ"
 
 #. Template: AdminGeneralCatalog
 msgid "Edit Catalog Item"
@@ -52,19 +55,19 @@ msgstr "カタログ・アイテムを修正"
 
 #. JS File: ITSM.GeneralCatalog
 msgid "Warning incident state can not be set to invalid."
-msgstr ""
+msgstr "警告インシデントのステータスを無効に設定することはできません。"
 
 #. SysConfig
 msgid "Comment 2"
-msgstr ""
+msgstr "コメント2"
 
 #. SysConfig
 msgid "Create and manage the General Catalog."
-msgstr "ジャネラル・カタログの作成と管理"
+msgstr "ジャネラル・カタログの作成と管理します。"
 
 #. SysConfig
 msgid "Define the general catalog comment 2."
-msgstr ""
+msgstr "ジェネラル・カタログのコメント 2を定義します。"
 
 #. SysConfig
 msgid "Defines the URL JS Color Picker path."
@@ -72,7 +75,7 @@ msgstr "URL JS カラーピッカーのパスを定義します。"
 
 #. SysConfig
 msgid "Frontend module registration for the AdminGeneralCatalog configuration in the admin area."
-msgstr "管理エリアでのAdminGeneralCatalogのフロントエンドモジュールの登録"
+msgstr "管理エリアでのAdminGeneralCatalogのフロントエンドモジュールの登録します。"
 
 #. SysConfig
 msgid "General Catalog"
@@ -80,13 +83,12 @@ msgstr "ジェネラル・カタログ"
 
 #. SysConfig
 msgid "Parameters for the example comment 2 of the general catalog attributes."
-msgstr "ジェネラル・カタログ属性のコメント例 2　の設定値"
+msgstr "ジェネラル・カタログ属性のコメント例 2の設定値"
 
 #. SysConfig
 msgid "Parameters for the example permission groups of the general catalog attributes."
-msgstr "ジェネラル・カタログ属性の権限グループ　の設定値"
+msgstr "ジェネラル・カタログの属性の権限グループの設定値例です。"
 
 #. SysConfig
 msgid "Permission Group"
 msgstr "権限グループ"
-
