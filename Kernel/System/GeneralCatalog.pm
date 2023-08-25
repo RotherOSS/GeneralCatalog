@@ -171,8 +171,9 @@ sub ClassRename {
 
 =head2 ItemList()
 
-returns a list as a hash reference of one general catalog class
+returns a list of items in a general catalog class as a hash reference.
 The key is the class ID, the value is the class name.
+When no items are found than a reference to an empty hash is returned.
 
 When the parameter C<Valid> is set to a true value then only valid items are returned.
 This is the default. When C<Valid> is explicitly set to C<0> then invalid items
@@ -197,6 +198,14 @@ Returns:
         73 => 'Back End',
         ...
     };
+
+or when the package ITSMCore is not installed:
+
+    my $ItemList = {};
+
+or in case of some error:
+
+    my %ItemLise = undef;
 
 =cut
 
@@ -252,7 +261,7 @@ sub ItemList {
     # create sql string
     my $SQL = "SELECT id, name FROM general_catalog $PreferencesTable "
         . "WHERE general_catalog_class = ? $PreferencesWhere ";
-    my @BIND = ( \$Param{Class}, @PreferencesBind );
+    my @Bind = ( \$Param{Class}, @PreferencesBind );
 
     # add valid string to sql string
     if ($OnlyValidItems) {
@@ -273,7 +282,7 @@ sub ItemList {
     # ask database
     my %ID2Name = $Kernel::OM->Get('Kernel::System::DB')->SelectMapping(
         SQL  => $SQL,
-        Bind => \@BIND,
+        Bind => \@Bind,
     );
 
     # return an empty mapping without logging an error and without caching the empty result
