@@ -47,8 +47,7 @@ sub new {
     my ( $Type, %Param ) = @_;
 
     # allocate new hash for object
-    my $Self = {};
-    bless( $Self, $Type );
+    my $Self = bless {}, $Type;
 
     # Force a reload of ZZZAuto.pm and ZZZAAuto.pm to get the fresh configuration values.
     for my $Module ( sort keys %INC ) {
@@ -58,7 +57,7 @@ sub new {
     }
 
     # Create common objects with fresh default config.
-    $Kernel::OM->ObjectsDiscard();
+    $Kernel::OM->ObjectsDiscard;
 
     return $Self;
 }
@@ -91,42 +90,6 @@ sub CodeReinstall {
     return 1;
 }
 
-=head2 CodeUpgrade()
-
-run the code upgrade part
-
-    my $Result = $CodeObject->CodeUpgrade();
-
-=cut
-
-sub CodeUpgrade {
-    my ( $Self, %Param ) = @_;
-
-    # migrate 'functionality' to external table
-    # this is only neccesary in CodeUpgrade, for new installations this is done
-    # in the package ITSMCore during CodeInstall
-    $Self->_MigrateFunctionality();
-
-    return 1;
-}
-
-=head2 CodeUpgradeFromLowerThan_4_0_91()
-
-This function is only executed if the installed module version is smaller than 4.0.91.
-
-my $Result = $CodeObject->CodeUpgradeFromLowerThan_4_0_91();
-
-=cut
-
-sub CodeUpgradeFromLowerThan_4_0_91 {    ## no critic qw(OTOBO::RequireCamelCase)
-    my ( $Self, %Param ) = @_;
-
-    # change configurations to match the new module location.
-    $Self->_MigrateConfigs();
-
-    return 1;
-}
-
 =head2 CodeUninstall()
 
 run the code uninstall part
@@ -137,111 +100,6 @@ run the code uninstall part
 
 sub CodeUninstall {
     my ( $Self, %Param ) = @_;
-
-    return 1;
-}
-
-=head2 _MigrateFunctionality()
-
-=cut
-
-sub _MigrateFunctionality {
-    my ( $Self, %Param ) = @_;
-
-    # SELECT all functionality values
-    $Kernel::OM->Get('Kernel::System::DB')->Prepare(
-        SQL => 'SELECT id, functionality FROM general_catalog',
-    );
-
-    my @List;
-    ROW:
-    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
-        next ROW if !$Row[1];
-
-        push @List, \@Row;
-    }
-
-    # save entries in new table
-    for my $Entry (@List) {
-        $Kernel::OM->Get('Kernel::System::DB')->Do(
-            SQL =>
-                'INSERT INTO general_catalog_preferences( general_catalog_id, pref_key, pref_value )'
-                . ' VALUES( ?, \'Functionality\', ? )',
-            Bind => [ \$Entry->[0], \$Entry->[1] ],
-        );
-    }
-
-    # drop column functionality
-    my ($Drop) = $Kernel::OM->Get('Kernel::System::DB')->SQLProcessor(
-        Database => [
-            {
-                Tag     => 'TableAlter',
-                Name    => 'general_catalog',
-                TagType => 'Start',
-            },
-            {
-                Tag     => 'ColumnDrop',
-                Name    => 'functionality',
-                TagType => 'Start',
-            },
-            {
-                Tag     => 'TableAlter',
-                TagType => 'End',
-            },
-        ],
-    );
-
-    $Kernel::OM->Get('Kernel::System::DB')->Do(
-        SQL => $Drop,
-    );
-
-    return 1;
-}
-
-=head2 _MigrateConfigs()
-
-change configurations to match the new module location.
-
-    my $Result = $CodeObject->_MigrateConfigs();
-
-=cut
-
-sub _MigrateConfigs {
-
-    my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
-    my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
-
-    my $Setting = $ConfigObject->Get('GeneralCatalogPreferences');
-
-    my @NewSettings;
-
-    CONFIGITEM:
-    for my $MenuModule ( sort keys %{$Setting} ) {
-
-        # update module location
-        my $Module = $Setting->{$MenuModule}->{'Module'};
-        if ( $Module !~ m{Kernel::Output::HTML::GeneralCatalogPreferences(\w+)} ) {
-            next CONFIGITEM;
-        }
-
-        # Define the new setting value.
-        $Setting->{$MenuModule}->{Module} = "Kernel::Output::HTML::GeneralCatalogPreferences::Generic";
-
-        # Build new setting.
-        push @NewSettings, {
-            Name           => 'GeneralCatalogPreferences###' . $MenuModule,
-            EffectiveValue => $Setting->{$MenuModule},
-        };
-    }
-
-    return 1 unless @NewSettings;
-
-    # Write new setting.
-    $SysConfigObject->SettingsSet(
-        UserID   => 1,
-        Comments => 'GeneralCatalog - package setup function: _MigrateConfigs',
-        Settings => \@NewSettings,
-    );
 
     return 1;
 }
