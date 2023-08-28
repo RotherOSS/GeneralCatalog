@@ -81,7 +81,7 @@ sub new {
         'IsFiltrable'                  => 0,
         'IsStatsCondition'             => 0,
         'IsCustomerInterfaceCapable'   => 1,
-        'IsLikeOperatorCapable'        => 1,
+        'IsLikeOperatorCapable'        => 0,    # only the item_ids are stored in dynamic_field_value
         'IsSetCapable'                 => 1,
     };
 
