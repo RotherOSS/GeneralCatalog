@@ -51,13 +51,14 @@ that are declared in the general catalog.
 
 =head1 PUBLIC INTERFACE
 
-This module implements the public interface of L<Kernel::System::DynamicField::Backend>.
+This dynamic field driver module implements the public interface of L<Kernel::System::DynamicField::Backend>.
 Please look there for a detailed reference of the functions.
 
 =head2 new()
 
-usually, you want to create an instance of this
-by using C<Kernel::System::DynamicField::Backend->new()>.
+it is usually not necessary to explicitly create instances of dynamic field drivers.
+Instances of the drivers are created in the constructor of the
+dynamic field backend object C<Kernel::System::DynamicField::Backend>.
 
 =cut
 
@@ -66,6 +67,11 @@ sub new {
 
     # allocate new hash for object
     my $Self = bless {}, $Type;
+
+    # GeneralCatalog dynamic fields are stored in the database table attribute dynamic_field_value.value_int.
+    $Self->{ValueType}      = 'Integer';
+    $Self->{ValueKey}       = 'ValueInt';
+    $Self->{TableAttribute} = 'value_int';
 
     # set field behaviors
     $Self->{Behaviors} = {
@@ -78,8 +84,6 @@ sub new {
         'IsLikeOperatorCapable'        => 1,
         'IsSetCapable'                 => 1,
     };
-
-    $Self->{ValueKey} = 'ValueInt';
 
     # get the Dynamic Field Backend custom extensions
     my $DynamicFieldDriverExtensions = $Kernel::OM->Get('Kernel::Config')->Get('DynamicFields::Extension::Driver::GeneralCatalog');
