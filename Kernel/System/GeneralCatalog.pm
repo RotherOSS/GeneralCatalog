@@ -68,9 +68,14 @@ sub new {
 
 =head2 ClassList()
 
-return an array reference of all general catalog classes
+return a reference to an array of all general catalog classes sorted alphabetically.
+Classed without valid items are returned as well.
 
-    my $ArrayRef = $GeneralCatalogObject->ClassList();
+    my $ClassList = $GeneralCatalogObject->ClassList;
+
+returns:
+
+    my $ClassList = [ 'Rhodos::Rhodos', 'Rhodos::Stegna' ];
 
 =cut
 
