@@ -83,13 +83,16 @@ sub ClassList {
     my ( $Self, %Param ) = @_;
 
     # ask database
-    my @ClassList = $Kernel::OM->Get('Kernel::System::DB')->SelectColArray(
-        SQL => <<'END_SQL',
-SELECT DISTINCT(general_catalog_class)
-  FROM general_catalog
-  ORDER BY general_catalog_class
-END_SQL
+    $Kernel::OM->Get('Kernel::System::DB')->Prepare(
+        SQL => 'SELECT DISTINCT(general_catalog_class) '
+            . 'FROM general_catalog ORDER BY general_catalog_class',
     );
+
+    # fetch the result
+    my @ClassList;
+    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
+        push @ClassList, $Row[0];
+    }
 
     # cache the result
     my $CacheKey = 'ClassList';
@@ -223,12 +226,13 @@ sub ItemList {
             Priority => 'error',
             Message  => 'Need Class!'
         );
-
         return;
     }
 
-    # per default only valid items are reported
-    my $OnlyValidItems = $Param{Valid} // 1;
+    # set default value
+    if ( !defined $Param{Valid} ) {
+        $Param{Valid} = 1;
+    }
 
     my $PreferencesCacheKey = '';
     my $PreferencesTable    = '';
@@ -269,39 +273,44 @@ sub ItemList {
     my @Bind = ( \$Param{Class}, @PreferencesBind );
 
     # add valid string to sql string
-    if ($OnlyValidItems) {
+    if ( $Param{Valid} ) {
         $SQL .= 'AND valid_id = 1 ';
     }
 
     # create cache key
-    my $CacheKey = 'ItemList::' . $Param{Class} . '####' . $OnlyValidItems . '####' . $PreferencesCacheKey;
+    my $CacheKey = 'ItemList::' . $Param{Class} . '####' . $Param{Valid} . '####' . $PreferencesCacheKey;
 
     # check if result is already cached
     my $Cache = $Kernel::OM->Get('Kernel::System::Cache')->Get(
         Type => $Self->{CacheType},
         Key  => $CacheKey,
     );
-
     return $Cache if $Cache;
 
     # ask database
-    my %ID2Name = $Kernel::OM->Get('Kernel::System::DB')->SelectMapping(
+    $Kernel::OM->Get('Kernel::System::DB')->Prepare(
         SQL  => $SQL,
         Bind => \@Bind,
     );
 
-    # return an empty mapping without logging an error and without caching the empty result
-    return {} unless %ID2Name;
+    # fetch the result
+    my %Data;
+    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
+        $Data{ $Row[0] } = $Row[1];
+    }
+
+    # just return without logging an error and without caching the empty result
+    return if !%Data;
 
     # cache the result
     $Kernel::OM->Get('Kernel::System::Cache')->Set(
         Type  => $Self->{CacheType},
         TTL   => $Self->{CacheTTL},
         Key   => $CacheKey,
-        Value => \%ID2Name,
+        Value => \%Data,
     );
 
-    return \%ID2Name;
+    return \%Data;
 }
 
 =head2 ItemGet()
