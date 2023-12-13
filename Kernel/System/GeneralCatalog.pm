@@ -41,6 +41,7 @@ Kernel::System::GeneralCatalog - general catalog lib
 create an object
 
     use Kernel::System::ObjectManager;
+
     local $Kernel::OM = Kernel::System::ObjectManager->new();
     my $GeneralCatalogObject = $Kernel::OM->Get('Kernel::System::GeneralCatalog');
 
@@ -69,7 +70,7 @@ sub new {
 =head2 ClassList()
 
 return a reference to an array of all general catalog classes sorted alphabetically.
-Classed without valid items are returned as well.
+Classes that do not have any valid items are returned as well.
 
     my $ClassList = $GeneralCatalogObject->ClassList;
 
@@ -110,7 +111,7 @@ sub ClassList {
 
 rename a general catalog class
 
-    my $True = $GeneralCatalogObject->ClassRename(
+    my $Success = $GeneralCatalogObject->ClassRename(
         ClassOld => 'ITSM::ConfigItem::State',
         ClassNew => 'ITSM::ConfigItem::DeploymentState',
     );
@@ -315,13 +316,13 @@ sub ItemList {
 
 =head2 ItemGet()
 
-get item attributes
+get item attributes including the preferences.
 
     my $ItemDataRef = $GeneralCatalogObject->ItemGet(
         ItemID => 3,
     );
 
-    or
+or
 
     my $ItemDataRef = $GeneralCatalogObject->ItemGet(
         Class => 'ITSM::Service::Type',
@@ -569,7 +570,7 @@ sub ItemAdd {
 
 update an existing general catalog item
 
-    my $True = $GeneralCatalogObject->ItemUpdate(
+    my $Success = $GeneralCatalogObject->ItemUpdate(
         ItemID        => 123,
         Name          => 'Item Name',
         ValidID       => 1,
@@ -689,7 +690,7 @@ sub ItemUpdate {
 
 =head2 GeneralCatalogPreferencesSet()
 
-set GeneralCatalog preferences
+set preferences for a general catalog item
 
     $GeneralCatalogObject->GeneralCatalogPreferencesSet(
         ItemID => 123,
@@ -712,7 +713,7 @@ sub GeneralCatalogPreferencesSet {
 
 =head2 GeneralCatalogPreferencesGet()
 
-get GeneralCatalog preferences
+get preferences for a general catalog item
 
     my %Preferences = $QueueObject->GeneralCatalogPreferencesGet(
         ItemID => 123,
