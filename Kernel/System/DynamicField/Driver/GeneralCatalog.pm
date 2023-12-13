@@ -1,7 +1,6 @@
 # --
 # OTOBO is a web-based ticketing system for service organisations.
 # --
-# Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
 # Copyright (C) 2019-2023 Rother OSS GmbH, https://otobo.de/
 # --
 # This program is free software: you can redistribute it and/or modify it under
@@ -77,11 +76,12 @@ sub new {
     $Self->{Behaviors} = {
         'IsACLReducible'               => 1,
         'IsNotificationEventCondition' => 0,
-        'IsSortable'                   => 0,
-        'IsFiltrable'                  => 0,
+        'IsSortable'                   => 1,
+        'IsFiltrable'                  => 1,
         'IsStatsCondition'             => 0,
         'IsCustomerInterfaceCapable'   => 1,
         'IsLikeOperatorCapable'        => 0,    # only the item_ids are stored in dynamic_field_value
+        'IsHiddenInTicketInformation'  => 0,
         'IsSetCapable'                 => 1,
     };
 
@@ -171,7 +171,7 @@ sub DisplayValueRender {
     }
 
     my $ValueSeparator;
-    my $Title = join ', ', @ReadableTitles;
+    my $Title = join( ', ', @ReadableTitles );
 
     # HTMLOutput transformations
     if ($HTMLOutput) {
@@ -179,7 +179,7 @@ sub DisplayValueRender {
             Text => $Title,
             Max  => $Param{TitleMaxChars} || '',
         );
-        $ValueSeparator = '<br>';
+        $ValueSeparator = '<br/>';
     }
     else {
         if ( $Param{TitleMaxChars} && length($Title) > $Param{TitleMaxChars} ) {
