@@ -31,11 +31,12 @@ use parent qw(Kernel::System::DynamicField::Driver::BaseEntity);
 
 # OTOBO modules
 use Kernel::Language qw(Translatable);
-use Kernel::System::VariableCheck qw(:all);
+use Kernel::System::VariableCheck qw(IsArrayRefWithData IsStringWithData);
 
 our @ObjectDependencies = (
     'Kernel::Config',
     'Kernel::System::GeneralCatalog',
+    'Kernel::System::Log',
     'Kernel::System::Main',
 );
 
@@ -50,7 +51,7 @@ that are declared in the general catalog.
 
 =head1 PUBLIC INTERFACE
 
-This dynamic field driver module implements the public interface of L<Kernel::System::DynamicField::Backend>.
+This module implements the public interface of L<Kernel::System::DynamicField::Backend>.
 Please look there for a detailed reference of the functions.
 
 =head2 new()
@@ -199,9 +200,7 @@ sub DisplayValueRender {
 sub ReadableValueRender {
     my ( $Self, %Param ) = @_;
 
-    # set Value and Title variables
     my $Value = '';
-    my $Title = '';
 
     # check value
     my @Values;
@@ -235,7 +234,7 @@ sub ReadableValueRender {
 
     # Output transformations
     $Value = join( $ItemSeparator, @ReadableValues );
-    $Title = $Value;
+    my $Title = $Value;
 
     # prepare title
     $Title = $Value;
@@ -274,7 +273,6 @@ sub PossibleValuesGet {
         $PossibleValues{''} = '-';
     }
 
-    # return the possible values hash as a reference
     return \%PossibleValues;
 }
 

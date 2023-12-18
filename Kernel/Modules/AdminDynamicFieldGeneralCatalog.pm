@@ -104,7 +104,8 @@ sub _Add {
     }
 
     # get the object type and field type display name
-    my $ConfigObject   = $Kernel::OM->Get('Kernel::Config');
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+
     my $ObjectTypeName = $ConfigObject->Get('DynamicFields::ObjectType')->{ $GetParam{ObjectType} }->{DisplayName}
         || '';
     my $FieldTypeName = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName} || '';
@@ -129,9 +130,9 @@ sub _Add {
 
 sub _AddAction {
     my ( $Self, %Param ) = @_;
-
     my %Errors;
     my %GetParam;
+
     my $ParamObject = $Kernel::OM->Get('Kernel::System::Web::Request');
 
     for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
@@ -278,10 +279,10 @@ sub _AddAction {
 sub _Change {
     my ( $Self, %Param ) = @_;
 
-    my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
     my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-    my %GetParam;
+    my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
 
+    my %GetParam;
     for my $Needed (qw(ObjectType FieldType)) {
         $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
         if ( !$GetParam{$Needed} ) {
@@ -296,7 +297,8 @@ sub _Change {
     }
 
     # get the object type and field type display name
-    my $ConfigObject   = $Kernel::OM->Get('Kernel::Config');
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+
     my $ObjectTypeName = $ConfigObject->Get('DynamicFields::ObjectType')->{ $GetParam{ObjectType} }->{DisplayName}
         || '';
     my $FieldTypeName = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName} || '';
@@ -351,9 +353,9 @@ sub _Change {
 
 sub _ChangeAction {
     my ( $Self, %Param ) = @_;
-
     my %Errors;
     my %GetParam;
+
     my $ParamObject = $Kernel::OM->Get('Kernel::System::Web::Request');
 
     for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
@@ -365,16 +367,18 @@ sub _ChangeAction {
     }
 
     my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-    my $FieldID      = $ParamObject->GetParam( Param => 'ID' );
+
+    my $FieldID = $ParamObject->GetParam( Param => 'ID' );
     if ( !$FieldID ) {
         return $LayoutObject->ErrorScreen(
             Message => Translatable('Need ID'),
         );
     }
 
-    # get dynamic field data
     my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
-    my $DynamicFieldData   = $DynamicFieldObject->DynamicFieldGet(
+
+    # get dynamic field data
+    my $DynamicFieldData = $DynamicFieldObject->DynamicFieldGet(
         ID => $FieldID,
     );
 
@@ -617,9 +621,9 @@ sub _ChangeAction {
 sub _ShowScreen {
     my ( $Self, %Param ) = @_;
 
+    my $Namespace = $Param{Namespace};
     $Param{DisplayFieldName} = 'New';
 
-    my $Namespace = $Param{Namespace};
     if ( $Param{Mode} eq 'Change' || $Param{Name} ) {
         $Param{ShowWarning}      = 'ShowWarning';
         $Param{DisplayFieldName} = $Param{Name};
@@ -831,16 +835,13 @@ sub _ShowScreen {
             },
         );
     }
-
-    if ( IsArrayRefWithData($NamespaceList) ) {
-        if ( IsStringWithData( $Param{NamespaceFilter} ) ) {
-            $FilterStrg .= ";NamespaceFilter=" . $LayoutObject->Output(
-                Template => '[% Data.Filter | uri %]',
-                Data     => {
-                    Filter => $Param{NamespaceFilter},
-                },
-            );
-        }
+    if ( IsStringWithData( $Param{NamespaceFilter} ) ) {
+        $FilterStrg .= ";NamespaceFilter=" . $LayoutObject->Output(
+            Template => '[% Data.Filter | uri %]',
+            Data     => {
+                Filter => $Param{NamespaceFilter},
+            },
+        );
     }
 
     # generate output

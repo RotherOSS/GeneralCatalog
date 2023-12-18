@@ -24,7 +24,7 @@
     [% BreadcrumbPath = [
             {
                 Name => Translate('Dynamic Fields Management'),
-                Link => 'AdminDynamicField',
+                Link => 'AdminDynamicField' _ Data.FilterStrg,
             },
         ]
     %]
@@ -225,6 +225,7 @@
                             <p class="FieldExplanation">[% Translate("Activate this option to allow multiple values for this field.") | html %]</p>
                         </div>
                         <div class="Clear"></div>
+
                     </fieldset>
                 </div>
             </div>
