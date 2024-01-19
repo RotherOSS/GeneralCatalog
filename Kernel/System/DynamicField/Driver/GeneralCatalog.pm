@@ -81,6 +81,7 @@ sub new {
         'IsLikeOperatorCapable'        => 0,    # only the item_ids are stored in dynamic_field_value
         'IsHiddenInTicketInformation'  => 0,
         'IsSetCapable'                 => 1,
+        'IsBaseArray'                  => 1,
     };
 
     # get the Dynamic Field Backend custom extensions
