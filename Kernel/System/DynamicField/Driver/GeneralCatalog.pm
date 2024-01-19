@@ -30,13 +30,10 @@ use parent qw(Kernel::System::DynamicField::Driver::BaseEntity);
 # CPAN modules
 
 # OTOBO modules
-use Kernel::Language qw(Translatable);
-use Kernel::System::VariableCheck qw(IsArrayRefWithData IsStringWithData);
 
 our @ObjectDependencies = (
     'Kernel::Config',
     'Kernel::System::GeneralCatalog',
-    'Kernel::System::Log',
     'Kernel::System::Main',
 );
 
