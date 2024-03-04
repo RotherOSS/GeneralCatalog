@@ -16,19 +16,30 @@
 
 package Kernel::Modules::AdminDynamicFieldGeneralCatalog;
 
+use v5.24;
 use strict;
 use warnings;
+use namespace::autoclean;
+use utf8;
+
+# core modules
+use List::Util qw(any);
+
+# CPAN modules
+
+# OTOBO modules
+use Kernel::System::VariableCheck qw(:all);
+use Kernel::Language              qw(Translatable);
 
 our $ObjectManagerDisabled = 1;
-
-use Kernel::System::VariableCheck qw(:all);
-use Kernel::Language qw(Translatable);
 
 sub new {
     my ( $Type, %Param ) = @_;
 
-    my $Self = {%Param};
-    bless( $Self, $Type );
+    my $Self = bless {%Param}, $Type;
+
+    # Some setup
+    $Self->{TemplateFile} = 'AdminDynamicFieldGeneralCatalog';
 
     # set possible values handling strings
     $Self->{EmptyString}     = '_DynamicFields_EmptyString_Dont_Use_It_String_Please';
@@ -55,7 +66,8 @@ sub Run {
             %Param,
         );
     }
-    elsif ( $Self->{Subaction} eq 'AddAction' ) {
+
+    if ( $Self->{Subaction} eq 'AddAction' ) {
 
         # challenge token check for write action
         $LayoutObject->ChallengeTokenCheck();
@@ -64,12 +76,14 @@ sub Run {
             %Param,
         );
     }
+
     if ( $Self->{Subaction} eq 'Change' ) {
         return $Self->_Change(
             %Param,
         );
     }
-    elsif ( $Self->{Subaction} eq 'ChangeAction' ) {
+
+    if ( $Self->{Subaction} eq 'ChangeAction' ) {
 
         # challenge token check for write action
         $LayoutObject->ChallengeTokenCheck();
@@ -78,6 +92,7 @@ sub Run {
             %Param,
         );
     }
+
     return $LayoutObject->ErrorScreen(
         Message => Translatable('Undefined subaction.'),
     );
@@ -90,8 +105,36 @@ sub _Add {
     my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
 
     my %GetParam;
+
+    # check if we clone from an existing field
+    my $CloneFieldID = $ParamObject->GetParam( Param => "ID" );
+    if ($CloneFieldID) {
+        my $FieldConfig = $Kernel::OM->Get('Kernel::System::DynamicField')->DynamicFieldGet(
+            ID => $CloneFieldID,
+        );
+
+        # if we found a field config, copy its content for usage in _ShowScreen
+        if ( IsHashRefWithData($FieldConfig) ) {
+
+            # copy standard stuff
+            for my $Key (qw(ObjectType FieldType Label Name ValidID)) {
+                $GetParam{$Key} = $FieldConfig->{$Key};
+            }
+
+            # iterate over special stuff and copy in-depth content as flat list
+            CONFIGKEY:
+            for my $ConfigKey ( keys $FieldConfig->{Config}->%* ) {
+                next CONFIGKEY if $ConfigKey eq 'PartOfSet';
+
+                my $DFDetails = $FieldConfig->{Config};
+                $GetParam{$ConfigKey} = $DFDetails->{$ConfigKey};
+            }
+        }
+        $GetParam{CloneFieldID} = $CloneFieldID;
+    }
+
     for my $Needed (qw(ObjectType FieldType FieldOrder)) {
-        $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
+        $GetParam{$Needed} //= $Kernel::OM->Get('Kernel::System::Web::Request')->GetParam( Param => $Needed );
         if ( !$GetParam{$Needed} ) {
             return $LayoutObject->ErrorScreen(
                 Message => $LayoutObject->{LanguageObject}->Translate( 'Need %s', $Needed ),
@@ -99,16 +142,40 @@ sub _Add {
         }
     }
 
-    for my $FilterParam (qw(ObjectType Namespace)) {
-        $GetParam{ $FilterParam . 'Filter' } = $ParamObject->GetParam( Param => $FilterParam . 'Filter' );
+    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+        $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
+    }
+
+    # extract field type specific parameters, e.g. MultiValue
+    SETTING:
+    for my $Setting ( $Param{FieldTypeSettings}->@* ) {
+
+        # skip custom inputs which are handled separately
+        # currently only used for reference filter list
+        next SETTING if !$Setting->{InputType};
+
+        my $Name = $Setting->{ConfigParamName};
+        if ( $Setting->{Multiple} ) {
+            $GetParam{$Name}->@* = $ParamObject->GetArray( Param => $Name );
+        }
+        else {
+            $GetParam{$Name} = $ParamObject->GetParam( Param => $Name );
+        }
+
+        # validate input if necessary
+        if ( $Setting->{Mandatory} ) {
+            if ( !$GetParam{$Name} || ( $Setting->{Multiple} && !$GetParam{$Name}->@* ) ) {
+                return $LayoutObject->ErrorScreen(
+                    Message => $LayoutObject->{LanguageObject}->Translate( 'Need %s', $Name ),
+                );
+            }
+        }
     }
 
     # get the object type and field type display name
-    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
-
-    my $ObjectTypeName = $ConfigObject->Get('DynamicFields::ObjectType')->{ $GetParam{ObjectType} }->{DisplayName}
-        || '';
-    my $FieldTypeName = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName} || '';
+    my $ConfigObject   = $Kernel::OM->Get('Kernel::Config');
+    my $ObjectTypeName = $ConfigObject->Get('DynamicFields::ObjectType')->{ $GetParam{ObjectType} }->{DisplayName} || '';
+    my $FieldTypeName  = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName}      || '';
 
     # check namespace validity
     my $Namespaces = $ConfigObject->Get('DynamicField::Namespaces');
@@ -124,22 +191,46 @@ sub _Add {
         BreadcrumbText => $LayoutObject->{LanguageObject}->Translate( 'Add %s field', $LayoutObject->{LanguageObject}->Translate($FieldTypeName) ),
         ObjectTypeName => $ObjectTypeName,
         FieldTypeName  => $FieldTypeName,
-        Namespace      => $Namespace,
     );
 }
 
 sub _AddAction {
     my ( $Self, %Param ) = @_;
-    my %Errors;
-    my %GetParam;
 
     my $ParamObject = $Kernel::OM->Get('Kernel::System::Web::Request');
 
+    my %Errors;
+    my %GetParam;
     for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
         $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
         if ( !$GetParam{$Needed} ) {
             $Errors{ $Needed . 'ServerError' }        = 'ServerError';
             $Errors{ $Needed . 'ServerErrorMessage' } = Translatable('This field is required.');
+        }
+    }
+
+    # extract field type specific parameters, e.g. MultiValue
+    SETTING:
+    for my $Setting ( $Param{FieldTypeSettings}->@* ) {
+
+        # skip custom inputs which are handled separately
+        # currently only used for reference filter list
+        next SETTING if !$Setting->{InputType};
+
+        my $Name = $Setting->{ConfigParamName};
+        if ( $Setting->{Multiple} ) {
+            $GetParam{$Name}->@* = $ParamObject->GetArray( Param => $Name );
+        }
+        else {
+            $GetParam{$Name} = $ParamObject->GetParam( Param => $Name );
+        }
+
+        # validate input if necessary
+        if ( $Setting->{Mandatory} ) {
+            if ( !$GetParam{$Name} || ( $Setting->{Multiple} && !$GetParam{$Name}->@* ) ) {
+                $Errors{ $Name . 'ServerError' }        = 'ServerError';
+                $Errors{ $Name . 'ServerErrorMessage' } = Translatable('This field is required.');
+            }
         }
     }
 
@@ -166,8 +257,8 @@ sub _AddAction {
         $GetParam{$ConfigParam} = $ParamObject->GetParam( Param => $ConfigParam );
     }
 
-    for my $FilterParam (qw(ObjectType Namespace)) {
-        $GetParam{ $FilterParam . 'Filter' } = $ParamObject->GetParam( Param => $FilterParam . 'Filter' );
+    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+        $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
     if ( $GetParam{Name} ) {
@@ -228,13 +319,25 @@ sub _AddAction {
     }
 
     # set specific config
-    my $FieldConfig = {
+    my %FieldConfig = (
         PossibleNone => $GetParam{PossibleNone},
         Tooltip      => $GetParam{Tooltip},
         Class        => $GetParam{GeneralCatalogClass},
         Multiselect  => $GetParam{Multiselect},
         MultiValue   => $GetParam{MultiValue},
-    };
+    );
+
+    # extract field type specific parameters, e.g. MultiValue
+    SETTING:
+    for my $Setting ( $Param{FieldTypeSettings}->@* ) {
+
+        # skip custom inputs which are handled separately
+        # currently only used for reference filter list
+        next SETTING if !$Setting->{InputType};
+
+        my $Name = $Setting->{ConfigParamName};
+        $FieldConfig{$Name} = $GetParam{$Name};
+    }
 
     # create a new field
     my $FieldID = $DynamicFieldObject->DynamicFieldAdd(
@@ -243,7 +346,7 @@ sub _AddAction {
         FieldOrder => $GetParam{FieldOrder},
         FieldType  => $GetParam{FieldType},
         ObjectType => $GetParam{ObjectType},
-        Config     => $FieldConfig,
+        Config     => \%FieldConfig,
         ValidID    => $GetParam{ValidID},
         UserID     => $Self->{UserID},
     );
@@ -279,8 +382,8 @@ sub _AddAction {
 sub _Change {
     my ( $Self, %Param ) = @_;
 
-    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
 
     my %GetParam;
     for my $Needed (qw(ObjectType FieldType)) {
@@ -292,19 +395,16 @@ sub _Change {
         }
     }
 
-    for my $FilterParam (qw(ObjectType Namespace)) {
-        $GetParam{ $FilterParam . 'Filter' } = $ParamObject->GetParam( Param => $FilterParam . 'Filter' );
+    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+        $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
     # get the object type and field type display name
-    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
-
-    my $ObjectTypeName = $ConfigObject->Get('DynamicFields::ObjectType')->{ $GetParam{ObjectType} }->{DisplayName}
-        || '';
-    my $FieldTypeName = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName} || '';
+    my $ConfigObject   = $Kernel::OM->Get('Kernel::Config');
+    my $ObjectTypeName = $ConfigObject->Get('DynamicFields::ObjectType')->{ $GetParam{ObjectType} }->{DisplayName} || '';
+    my $FieldTypeName  = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName}      || '';
 
     my $FieldID = $ParamObject->GetParam( Param => 'ID' );
-
     if ( !$FieldID ) {
         return $LayoutObject->ErrorScreen(
             Message => Translatable('Need ID'),
@@ -324,24 +424,17 @@ sub _Change {
         );
     }
 
-    my %Config = ();
+    my %Config;
 
     # extract configuration
     if ( IsHashRefWithData( $DynamicFieldData->{Config} ) ) {
-
-        %Config = (
-            PossibleNone        => $DynamicFieldData->{Config}->{PossibleNone},
-            GeneralCatalogClass => $DynamicFieldData->{Config}->{Class},
-            Multiselect         => $DynamicFieldData->{Config}->{Multiselect},
-            MultiValue          => $DynamicFieldData->{Config}->{MultiValue},
-        );
-
+        %Config = $DynamicFieldData->{Config}->%*;
     }
 
     return $Self->_ShowScreen(
         %Param,
         %GetParam,
-        %${DynamicFieldData},
+        $DynamicFieldData->%*,
         %Config,
         ID             => $FieldID,
         Mode           => 'Change',
@@ -353,19 +446,8 @@ sub _Change {
 
 sub _ChangeAction {
     my ( $Self, %Param ) = @_;
-    my %Errors;
-    my %GetParam;
 
-    my $ParamObject = $Kernel::OM->Get('Kernel::System::Web::Request');
-
-    for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
-        $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
-        if ( !$GetParam{$Needed} ) {
-            $Errors{ $Needed . 'ServerError' }        = 'ServerError';
-            $Errors{ $Needed . 'ServerErrorMessage' } = Translatable('This field is required.');
-        }
-    }
-
+    my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
     my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
 
     my $FieldID = $ParamObject->GetParam( Param => 'ID' );
@@ -375,10 +457,44 @@ sub _ChangeAction {
         );
     }
 
-    my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
+    my %Errors;
+    my %GetParam;
+    for my $Needed (qw(Name Label FieldOrder GeneralCatalogClass)) {
+        $GetParam{$Needed} = $ParamObject->GetParam( Param => $Needed );
+        if ( !$GetParam{$Needed} ) {
+            $Errors{ $Needed . 'ServerError' }        = 'ServerError';
+            $Errors{ $Needed . 'ServerErrorMessage' } = Translatable('This field is required.');
+        }
+    }
+
+    # extract field type specific parameters, e.g. MultiValue
+    SETTING:
+    for my $Setting ( $Param{FieldTypeSettings}->@* ) {
+
+        # skip custom inputs which are handled separately
+        # currently only used for reference filter list
+        next SETTING if !$Setting->{InputType};
+
+        my $Name = $Setting->{ConfigParamName};
+        if ( $Setting->{Multiple} ) {
+            $GetParam{$Name}->@* = $ParamObject->GetArray( Param => $Name );
+        }
+        else {
+            $GetParam{$Name} = $ParamObject->GetParam( Param => $Name );
+        }
+
+        # validate input if necessary
+        if ( $Setting->{Mandatory} ) {
+            if ( !defined $GetParam{$Name} || ( $Setting->{Multiple} && !$GetParam{$Name}->@* ) ) {
+                $Errors{ $Name . 'ServerError' }        = 'ServerError';
+                $Errors{ $Name . 'ServerErrorMessage' } = Translatable('This field is required.');
+            }
+        }
+    }
 
     # get dynamic field data
-    my $DynamicFieldData = $DynamicFieldObject->DynamicFieldGet(
+    my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
+    my $DynamicFieldData   = $DynamicFieldObject->DynamicFieldGet(
         ID => $FieldID,
     );
 
@@ -411,8 +527,8 @@ sub _ChangeAction {
         $GetParam{$ConfigParam} = $ParamObject->GetParam( Param => $ConfigParam );
     }
 
-    for my $FilterParam (qw(ObjectType Namespace)) {
-        $GetParam{ $FilterParam . 'Filter' } = $ParamObject->GetParam( Param => $FilterParam . 'Filter' );
+    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+        $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
     if ( $GetParam{Name} ) {
@@ -477,11 +593,10 @@ sub _ChangeAction {
     }
 
     # Check if dynamic field is present in SysConfig setting
-    my $UpdateEntity        = $ParamObject->GetParam( Param => 'UpdateEntity' ) || '';
-    my $SysConfigObject     = $Kernel::OM->Get('Kernel::System::SysConfig');
-    my %DynamicFieldOldData = %{$DynamicFieldData};
-    my @IsDynamicFieldInSysConfig;
-    @IsDynamicFieldInSysConfig = $SysConfigObject->ConfigurationEntityCheck(
+    my $UpdateEntity              = $ParamObject->GetParam( Param => 'UpdateEntity' ) || '';
+    my $SysConfigObject           = $Kernel::OM->Get('Kernel::System::SysConfig');
+    my %DynamicFieldOldData       = %{$DynamicFieldData};
+    my @IsDynamicFieldInSysConfig = $SysConfigObject->ConfigurationEntityCheck(
         EntityType => 'DynamicField',
         EntityName => $DynamicFieldData->{Name},
     );
@@ -497,7 +612,7 @@ sub _ChangeAction {
             $Errors{ValidOptionServerError} = 'InSetting';
         }
 
-        # In case changing name an authorization (UpdateEntity) should be send
+        # In case changing name an authorization (UpdateEntity) should be sent
         elsif ( $DynamicFieldData->{Name} ne $GetParam{Name} && !$UpdateEntity ) {
             $Errors{NameInvalid}              = 'ServerError';
             $Errors{InSettingNameServerError} = 1;
@@ -516,13 +631,25 @@ sub _ChangeAction {
     }
 
     # set specific config
-    my $FieldConfig = {
+    my %FieldConfig = (
         PossibleNone => $GetParam{PossibleNone},
         Tooltip      => $GetParam{Tooltip},
         Class        => $GetParam{GeneralCatalogClass},
         Multiselect  => $GetParam{Multiselect},
         MultiValue   => $GetParam{MultiValue},
-    };
+    );
+
+    # extract field type specific parameters, e.g. MultiValue
+    SETTING:
+    for my $Setting ( $Param{FieldTypeSettings}->@* ) {
+
+        # skip custom inputs which are handled separately
+        # currently only used for reference filter list
+        next SETTING if !$Setting->{InputType};
+
+        my $Name = $Setting->{ConfigParamName};
+        $FieldConfig{$Name} = $GetParam{$Name};
+    }
 
     # update dynamic field (FieldType and ObjectType cannot be changed; use old values)
     my $UpdateSuccess = $DynamicFieldObject->DynamicFieldUpdate(
@@ -532,7 +659,7 @@ sub _ChangeAction {
         FieldOrder => $GetParam{FieldOrder},
         FieldType  => $DynamicFieldData->{FieldType},
         ObjectType => $DynamicFieldData->{ObjectType},
-        Config     => $FieldConfig,
+        Config     => \%FieldConfig,
         ValidID    => $GetParam{ValidID},
         UserID     => $Self->{UserID},
     );
@@ -621,10 +748,10 @@ sub _ChangeAction {
 sub _ShowScreen {
     my ( $Self, %Param ) = @_;
 
-    my $Namespace = $Param{Namespace};
     $Param{DisplayFieldName} = 'New';
 
-    if ( $Param{Mode} eq 'Change' || $Param{Name} ) {
+    my $Namespace;
+    if ( $Param{Mode} eq 'Change' || ( $Param{Name} && !$Param{CloneFieldID} ) ) {
         $Param{ShowWarning}      = 'ShowWarning';
         $Param{DisplayFieldName} = $Param{Name};
 
@@ -638,16 +765,10 @@ sub _ShowScreen {
         }
     }
 
-    $Param{DeletedString} = $Self->{DeletedString};
-
-    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-
-    # header
-    my $Output = $LayoutObject->Header();
-    $Output .= $LayoutObject->NavigationBar();
+    my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
 
     # get all fields
-    my $DynamicFieldList = $Kernel::OM->Get('Kernel::System::DynamicField')->DynamicFieldListGet(
+    my $DynamicFieldList = $DynamicFieldObject->DynamicFieldListGet(
         Valid => 0,
     );
 
@@ -671,6 +792,7 @@ sub _ShowScreen {
     }
 
     # show the names of the other fields to ease ordering
+    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my %OrderNamesList;
     my $CurrentlyText = $LayoutObject->{LanguageObject}->Translate('Currently') . ': ';
     for my $OrderNumber ( sort @DynamicfieldOrderList ) {
@@ -681,6 +803,10 @@ sub _ShowScreen {
                 . $DynamicfieldNamesList{$OrderNumber};
         }
     }
+
+    # header
+    my $Output = $LayoutObject->Header();
+    $Output .= $LayoutObject->NavigationBar();
 
     my $DynamicFieldOrderStrg = $LayoutObject->BuildSelection(
         Data          => \%OrderNamesList,
@@ -723,7 +849,7 @@ sub _ShowScreen {
             PossibleNone  => 1,
             Translation   => 0,
             Sort          => 'AlphanumericValue',
-            Class         => 'Modernize W75pc',
+            Class         => 'Modernize W50pc',
         );
 
         $LayoutObject->Block(
@@ -743,7 +869,7 @@ sub _ShowScreen {
         SelectedID   => $Param{ValidID} || 1,
         PossibleNone => 0,
         Translation  => 1,
-        Class        => 'Modernize W50pc',
+        Class        => 'Modernize W50pc Validate_Required',
     );
 
     my $PossibleNone = $Param{PossibleNone} || '0';
@@ -760,7 +886,7 @@ sub _ShowScreen {
     );
 
     # define tooltip
-    my $Tooltip = ( defined $Param{Config}->{Tooltip} ? $Param{Config}->{Tooltip} : '' );
+    my $Tooltip = $Param{Tooltip} // '';
 
     # create the default value element
     $LayoutObject->Block(
@@ -771,8 +897,9 @@ sub _ShowScreen {
         },
     );
 
-    # Internal fields can not be deleted and name should not change.
     my $ReadonlyInternalField = '';
+
+    # Internal fields can not be deleted and name should not change.
     if ( $Param{InternalField} ) {
         $LayoutObject->Block(
             Name => 'InternalField',
