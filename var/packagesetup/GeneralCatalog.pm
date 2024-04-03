@@ -38,6 +38,7 @@ var::packagesetup::GeneralCatalog - code to execute during package installation
 create an object
 
     use Kernel::System::ObjectManager;
+
     local $Kernel::OM = Kernel::System::ObjectManager->new();
     my $CodeObject = $Kernel::OM->Get('var::packagesetup::GeneralCatalog');
 
@@ -64,7 +65,7 @@ sub new {
 
 =head2 CodeInstall()
 
-run the code install part
+runs the code install part
 
     my $Result = $CodeObject->CodeInstall();
 
@@ -78,7 +79,7 @@ sub CodeInstall {
 
 =head2 CodeReinstall()
 
-run the code reinstall part
+runs the code reinstall part
 
     my $Result = $CodeObject->CodeReinstall();
 
@@ -92,7 +93,7 @@ sub CodeReinstall {
 
 =head2 CodeUninstall()
 
-run the code uninstall part
+runs the code uninstall part
 
     my $Result = $CodeObject->CodeUninstall();
 

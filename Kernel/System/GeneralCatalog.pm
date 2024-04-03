@@ -38,7 +38,7 @@ Kernel::System::GeneralCatalog - general catalog lib
 
 =head2 new()
 
-create an object
+creates an object
 
     use Kernel::System::ObjectManager;
 
@@ -109,7 +109,7 @@ sub ClassList {
 
 =head2 ClassRename()
 
-rename a general catalog class
+renames a general catalog class
 
     my $Success = $GeneralCatalogObject->ClassRename(
         ClassOld => 'ITSM::ConfigItem::State',
@@ -449,7 +449,7 @@ sub ItemGet {
 
 =head2 ItemAdd()
 
-add a new general catalog item
+adds a new general catalog item. Preferences can't be passed in this method.
 
     my $ItemID = $GeneralCatalogObject->ItemAdd(
         Class         => 'ITSM::Service::Type',
@@ -568,7 +568,7 @@ sub ItemAdd {
 
 =head2 ItemUpdate()
 
-update an existing general catalog item
+updates an existing general catalog item. Preferences can't be passed in this method.
 
     my $Success = $GeneralCatalogObject->ItemUpdate(
         ItemID        => 123,
@@ -690,7 +690,7 @@ sub ItemUpdate {
 
 =head2 GeneralCatalogPreferencesSet()
 
-set preferences for a general catalog item
+sets a single preference for a general catalog item
 
     $GeneralCatalogObject->GeneralCatalogPreferencesSet(
         ItemID => 123,
@@ -713,7 +713,7 @@ sub GeneralCatalogPreferencesSet {
 
 =head2 GeneralCatalogPreferencesGet()
 
-get preferences for a general catalog item
+gets all preferences for a general catalog item
 
     my %Preferences = $QueueObject->GeneralCatalogPreferencesGet(
         ItemID => 123,

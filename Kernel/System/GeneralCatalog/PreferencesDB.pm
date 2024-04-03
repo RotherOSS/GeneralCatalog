@@ -61,7 +61,7 @@ sub new {
 
 =head2 GeneralCatalogPreferencesSet()
 
-sets preferences for an item
+sets a single preference for a general catalog item
 
     $PreferencesObject->GeneralCatalogPreferencesSet(
         ItemID => 1234,
@@ -110,7 +110,7 @@ sub GeneralCatalogPreferencesSet {
 
 =head2 GeneralCatalogPreferencesGet()
 
-sets all Preferences for an item
+gets all preferences for a general catalog item
 
     my %Preferences = $PreferencesObject->GeneralCatalogPreferencesGet(
         ItemID => 123,
