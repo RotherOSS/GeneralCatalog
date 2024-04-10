@@ -79,15 +79,13 @@ sub Run {
 
     for my $Key ( sort keys %{ $Param{GetParam} } ) {
         my @Array = @{ $Param{GetParam}->{$Key} };
-        for my $Value (@Array) {
 
-            # pref update db
-            $Kernel::OM->Get('Kernel::System::GeneralCatalog')->GeneralCatalogPreferencesSet(
-                ItemID => $Param{ItemID},
-                Key    => $Key,
-                Value  => $Value,
-            );
-        }
+        # pref update db
+        $Kernel::OM->Get('Kernel::System::GeneralCatalog')->GeneralCatalogPreferencesSet(
+            ItemID => $Param{ItemID},
+            Key    => $Key,
+            Value  => \@Array,
+        );
     }
 
     $Self->{Message} = 'Preferences updated successfully!';
