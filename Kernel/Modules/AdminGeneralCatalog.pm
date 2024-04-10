@@ -261,6 +261,10 @@ sub Run {
                     );
                 }
 
+                if ( $ParamItem->{Name} eq 'Color' ) {
+                    $ParamItem->{SelectedID} = $ParamItem->{SelectedID}[0];
+                }
+
                 $LayoutObject->Block(
                     Name => $ParamItem->{Block} || $Preferences{$Item}->{Block} || 'Option',
                     Data => {
