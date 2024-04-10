@@ -316,7 +316,7 @@ sub ItemList {
 
 =head2 ItemGet()
 
-get item attributes including the preferences.
+get item attributes including the preferences. Note that preferences are generally returned as array refs.
 
     my $ItemDataRef = $GeneralCatalogObject->ItemGet(
         ItemID => 3,
@@ -335,7 +335,7 @@ returns
         'ItemID'     => '23',
         'Class'      => 'ITSM::Service::Type',
         'Name'       => 'Underpinning Contract'
-        'Comment'    => 'Some Comment',
+        'Comment'    => ['Some Comment'],
         'ValidID'    => '1',
         'CreateTime' => '2012-01-12 09:36:24',
         'CreateBy'   => '1',

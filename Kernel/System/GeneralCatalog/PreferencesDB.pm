@@ -25,6 +25,8 @@ our @ObjectDependencies = (
     'Kernel::System::Log',
 );
 
+use Kernel::System::VariableCheck qw(IsArrayRefWithData);
+
 =head1 NAME
 
 Kernel::System::GeneralCatalog::PreferencesDB - some preferences functions for general catalog
@@ -66,7 +68,7 @@ sets a single preference for a general catalog item
     $PreferencesObject->GeneralCatalogPreferencesSet(
         ItemID => 1234,
         Key    => 'Functionality',
-        Value  => 'operational',
+        Value  => ['operational'],
     );
 
 =cut
@@ -75,7 +77,7 @@ sub GeneralCatalogPreferencesSet {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    for my $Needed (qw(ItemID Key Value)) {
+    for my $Needed (qw(ItemID Key)) {
         if ( !defined( $Param{$Needed} ) ) {
             $Kernel::OM->Get('Kernel::System::Log')->Log(
                 Priority => 'error',
@@ -85,8 +87,18 @@ sub GeneralCatalogPreferencesSet {
         }
     }
 
+    if ( $Param{Value} && ( ref $Param{Value} ne 'ARRAY' ) ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Value invalid!",
+        );
+        return;
+    }
+
+    my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+
     # delete old data
-    return if !$Kernel::OM->Get('Kernel::System::DB')->Do(
+    return if !$DBObject->Do(
         SQL => "DELETE FROM $Self->{PreferencesTable} WHERE "
             . "$Self->{PreferencesTableGcID} = ? AND $Self->{PreferencesTableKey} = ?",
         Bind => [
@@ -95,17 +107,29 @@ sub GeneralCatalogPreferencesSet {
         ],
     );
 
-    # insert new data
-    return $Kernel::OM->Get('Kernel::System::DB')->Do(
+    # insert new data, if given (allows to simply delete data)
+    return unless IsArrayRefWithData( $Param{Value} );
+
+    my $NumInserts = $DBObject->DoArray(
         SQL => "INSERT INTO $Self->{PreferencesTable} ($Self->{PreferencesTableGcID}, "
             . " $Self->{PreferencesTableKey}, $Self->{PreferencesTableValue}) "
             . " VALUES (?, ?, ?)",
         Bind => [
-            \$Param{ItemID},
-            \$Param{Key},
-            \$Param{Value},
+            $Param{ItemID},
+            $Param{Key},
+            $Param{Value},
         ],
     );
+
+    if ( $NumInserts != scalar $Param{Value}->@* ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Preferences insertion failed!",
+        );
+        return;
+    }
+
+    return 1;
 }
 
 =head2 GeneralCatalogPreferencesGet()
@@ -146,7 +170,8 @@ sub GeneralCatalogPreferencesGet {
 
     my %Data;
     while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
-        $Data{ $Row[0] } = $Row[1];
+        $Data{ $Row[0] } //= [];
+        push $Data{ $Row[0] }->@*, $Row[1];
     }
 
     # return data
