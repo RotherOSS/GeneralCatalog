@@ -85,6 +85,7 @@
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::GeneralCatalogPreferences::Generic</Item>
                 <Item Key="Label" Translatable="1">Comment 2</Item>
+                <Item Key="Priority"></Item>
                 <Item Key="Desc" Translatable="1">Define the general catalog comment 2.</Item>
                 <Item Key="Block">TextArea</Item>
                 <Item Key="Cols">50</Item>
@@ -100,6 +101,7 @@
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::GeneralCatalogPreferences::Generic</Item>
                 <Item Key="Label" Translatable="1">Permission Group</Item>
+                <Item Key="Priority">10</Item>
                 <Item Key="Block">Permission</Item>
                 <Item Key="Class">ITSM::ConfigItem::Class</Item>
                 <Item Key="PrefKey">Permission</Item>

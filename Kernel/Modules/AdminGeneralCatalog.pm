@@ -220,7 +220,26 @@ sub Run {
         }
 
         ITEM:
-        for my $Item ( sort keys %Preferences ) {
+        for my $Item (
+
+            # sort items by priority
+            sort {
+                if ( defined $Preferences{$a}{Priority} && defined $Preferences{$b}{Priority} ) {
+                    $Preferences{$a}{Priority} <=> $Preferences{$b}{Priority};
+                }
+
+                # sort alphabetically if no priority is configured
+                elsif ( !defined $Preferences{$a}{Priority} && !defined $Preferences{$b}{Priority} ) {
+                    $a cmp $b;
+                }
+
+                # sort priority above non-priority
+                else {
+                    return int( defined $Preferences{$a}{Priority} ) <=> int( defined $Preferences{$b}{Priority} );
+                }
+            } keys %Preferences
+            )
+        {
 
             # skip items that don't belong to the class
             if ( $Preferences{$Item}->{Class} && $Preferences{$Item}->{Class} ne $ItemData{Class} )
