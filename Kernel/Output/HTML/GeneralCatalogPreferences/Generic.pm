@@ -52,14 +52,17 @@ sub Param {
             : $Self->{ConfigItem}->{DataSelected};
     }
 
+    for my $SelectOption (qw(PossibleNone Multiple)) {
+        $Param{$SelectOption} = $Self->{ConfigItem}{$SelectOption};
+    }
+
     if ( !( defined $Self->{ConfigItem}->{Block} && $Self->{ConfigItem}->{Block} ) ) {
         $Self->{ConfigItem}->{Block} = 'Text';
     }
 
     if ( $Self->{ConfigItem}->{Block} eq 'Permission' ) {
-        $Param{Data}         = { $Kernel::OM->Get('Kernel::System::Group')->GroupList( Valid => 1 ) };
-        $Param{PossibleNone} = 1;
-        $Param{Block}        = 'Option';
+        $Param{Data}  = { $Kernel::OM->Get('Kernel::System::Group')->GroupList( Valid => 1 ) };
+        $Param{Block} = 'Option';
     }
 
     push(
