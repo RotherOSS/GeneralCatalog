@@ -20,8 +20,10 @@ use strict;
 use warnings;
 
 our @ObjectDependencies = (
+    'Kernel::Config',
     'Kernel::System::GeneralCatalog',
     'Kernel::System::Group',
+    'Kernel::System::ITSMConfigItem',
     'Kernel::System::Web::Request',
 );
 
@@ -62,6 +64,24 @@ sub Param {
 
     if ( $Self->{ConfigItem}->{Block} eq 'Permission' ) {
         $Param{Data}  = { $Kernel::OM->Get('Kernel::System::Group')->GroupList( Valid => 1 ) };
+        $Param{Block} = 'Option';
+    }
+
+    if ( $Self->{ConfigItem}->{Block} eq 'ConfigItemVersionTrigger' ) {
+        my $ClassDefinition = $Kernel::OM->Get('Kernel::System::ITSMConfigItem')->DefinitionGet(
+            ClassID => $Param{GeneralCatalogData}{ItemID},
+        );
+        my %DynamicFieldNames = map { 'DynamicField_' . $_ => 'DynamicField_' . $_ } keys $ClassDefinition->{DynamicFieldRef}->%*;
+        $Param{Data} = {
+            $Self->{ConfigItem}->{Data}->%*,
+            %DynamicFieldNames,
+        };
+        $Param{Block} = 'Option';
+    }
+
+    if ( $Self->{ConfigItem}->{Block} eq 'ConfigItemClassTags' ) {
+        my $Tags = $Kernel::OM->Get('Kernel::Config')->Get('ITSMConfigItem::Tags');
+        $Param{Data}->%* = map { $_ => $_ } ( $Tags // [] )->@*;
         $Param{Block} = 'Option';
     }
 
