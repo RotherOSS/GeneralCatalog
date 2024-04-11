@@ -186,7 +186,7 @@ sub Param {
     }
 
     if ( $Self->{ConfigItem}->{Block} eq 'ConfigItemClassTags' ) {
-        my $Tags = $Kernel::OM->Get('Kernel::Config')->Get('ITSMConfigItem::Tags');
+        my $Tags = $Kernel::OM->Get('Kernel::Config')->Get('ITSMConfigItem::ClassTags');
         $Param{Data}->%* = map { $_ => $_ } ( $Tags // [] )->@*;
         $Param{Block} = 'Option';
     }
