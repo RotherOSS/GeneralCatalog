@@ -19,11 +19,15 @@ package Kernel::Output::HTML::GeneralCatalogPreferences::Generic;
 use strict;
 use warnings;
 
+use File::Basename qw(fileparse);
+
 our @ObjectDependencies = (
     'Kernel::Config',
     'Kernel::System::GeneralCatalog',
     'Kernel::System::Group',
     'Kernel::System::ITSMConfigItem',
+    'Kernel::System::Log',
+    'Kernel::System::Main',
     'Kernel::System::Web::Request',
 );
 
@@ -64,6 +68,108 @@ sub Param {
 
     if ( $Self->{ConfigItem}->{Block} eq 'Permission' ) {
         $Param{Data}  = { $Kernel::OM->Get('Kernel::System::Group')->GroupList( Valid => 1 ) };
+        $Param{Block} = 'Option';
+    }
+
+    if ( $Self->{ConfigItem}->{Block} eq 'NameModule' ) {
+
+        # get main object
+        my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
+
+        # iterate on name module files
+        my $NameModuleDir = $Kernel::OM->Get('Kernel::Config')->Get('Home') . '/Kernel/System/ITSMConfigItem/Name';
+        my @NameModules;
+        if ( -d $NameModuleDir ) {
+            my @AllNameModuleFiles = $MainObject->DirectoryRead(
+                Directory => $NameModuleDir,
+                Filter    => '*.pm',
+            );
+            NAME_MODULE_FILE:
+            for my $NameModuleFile (@AllNameModuleFiles) {
+                my $ClassNameFinalPart = fileparse( $NameModuleFile, '.pm' );
+                my $ClassName          = "Kernel::System::ITSMConfigItem::Name::$ClassNameFinalPart";
+
+                if ( !$MainObject->RequireBaseClass($ClassName) ) {
+                    $Kernel::OM->Get('Kernel::System::Log')->Log(
+                        Priority => 'notice',
+                        Message  => "ConfigItem name module $ClassName could not be loaded!",
+                    );
+                    next NAME_MODULE_FILE;
+                }
+
+                push @NameModules, $ClassNameFinalPart;
+            }
+        }
+
+        $Param{Data}->%* = map { $_ => $_ } @NameModules;
+        $Param{Block} = 'Option';
+    }
+
+    if ( $Self->{ConfigItem}->{Block} eq 'NumberModule' ) {
+
+        # get main object
+        my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
+
+        # iterate on number module files
+        my $NumberModuleDir = $Kernel::OM->Get('Kernel::Config')->Get('Home') . '/Kernel/System/ITSMConfigItem/Number';
+        my @NumberModules;
+        if ( -d $NumberModuleDir ) {
+            my @AllNumberModuleFiles = $MainObject->DirectoryRead(
+                Directory => $NumberModuleDir,
+                Filter    => '*.pm',
+            );
+            NUMBER_MODULE_FILE:
+            for my $NumberModuleFile (@AllNumberModuleFiles) {
+                my $ClassNameFinalPart = fileparse( $NumberModuleFile, '.pm' );
+                my $ClassName          = "Kernel::System::ITSMConfigItem::Number::$ClassNameFinalPart";
+
+                if ( !$MainObject->RequireBaseClass($ClassName) ) {
+                    $Kernel::OM->Get('Kernel::System::Log')->Log(
+                        Priority => 'notice',
+                        Message  => "ConfigItem number module $ClassName could not be loaded!",
+                    );
+                    next NUMBER_MODULE_FILE;
+                }
+
+                push @NumberModules, $ClassNameFinalPart;
+            }
+        }
+
+        $Param{Data}->%* = map { $_ => $_ } @NumberModules;
+        $Param{Block} = 'Option';
+    }
+
+    if ( $Self->{ConfigItem}->{Block} eq 'VersionStringModule' ) {
+
+        # get main object
+        my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
+
+        # iterate on version string module files
+        my $VersionStringModuleDir = $Kernel::OM->Get('Kernel::Config')->Get('Home') . '/Kernel/System/ITSMConfigItem/VersionString';
+        my @VersionStringModules;
+        if ( -d $VersionStringModuleDir ) {
+            my @AllVersionStringModuleFiles = $MainObject->DirectoryRead(
+                Directory => $VersionStringModuleDir,
+                Filter    => '*.pm',
+            );
+
+            VERSION_STRING_MODULE_FILE:
+            for my $VersionStringModuleFile (@AllVersionStringModuleFiles) {
+                my $ClassNameFinalPart = fileparse( $VersionStringModuleFile, '.pm' );
+                my $ClassName          = "Kernel::System::ITSMConfigItem::VersionString::$ClassNameFinalPart";
+
+                if ( !$MainObject->RequireBaseClass($ClassName) ) {
+                    $Kernel::OM->Get('Kernel::System::Log')->Log(
+                        Priority => 'notice',
+                        Message  => "ConfigItem version string module $ClassName could not be loaded!",
+                    );
+                    next VERSION_STRING_MODULE_FILE;
+                }
+
+                push @VersionStringModules, $ClassNameFinalPart;
+            }
+        }
+        $Param{Data}->%* = map { $_ => $_ } @VersionStringModules;
         $Param{Block} = 'Option';
     }
 
