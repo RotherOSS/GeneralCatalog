@@ -120,7 +120,7 @@ $Selenium->RunTest(
 
         # Verify error message.
         $Selenium->content_contains(
-            'Need ItemID OR Class and Name!',
+            'Can\'t add new item! General catalog item with same name already exists in this class.',
             "Error message - displayed",
         );
 
