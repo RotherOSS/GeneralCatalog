@@ -280,7 +280,7 @@ sub Run {
                     );
                 }
 
-                if ( $ParamItem->{Name} eq 'Color' ) {
+                if ( grep { $ParamItem->{Name} eq $_ } qw(Color Comment2) ) {
                     $ParamItem->{SelectedID} = $ParamItem->{SelectedID}[0];
                 }
 
@@ -370,6 +370,9 @@ sub Run {
                 %ItemData,
                 UserID => $Self->{UserID},
             );
+        }
+        if ( !$Success ) {
+            return $LayoutObject->ErrorScreen();
         }
 
         # update preferences
