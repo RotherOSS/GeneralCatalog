@@ -153,7 +153,7 @@ sub ClassRename {
 
     # fetch the result
     my $AlreadyExists = 0;
-    while ( my @Row = $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray() ) {
+    while ( $Kernel::OM->Get('Kernel::System::DB')->FetchrowArray ) {
         $AlreadyExists = 1;
     }
 

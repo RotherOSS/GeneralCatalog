@@ -81,12 +81,7 @@ my @UserIDs;
 }
 
 # create needed random classes
-my @ClassRand;
-
-for my $Counter ( 1 .. 3 ) {
-
-    push @ClassRand, $Helper->GetRandomNumber();
-}
+my @ClassRand = map { $Helper->GetRandomNumber } ( 0 .. 2 );
 
 # store original general catalog permission preferences setting
 my $GeneralCatalogPreferencesPermissionsOrg;
@@ -679,7 +674,6 @@ for my $Item ( @{$ItemData} ) {
     $Item->{UpdateGet}->{Functionality} ||= '';
     $ExistingFunctionalitiesTmp{ $Item->{UpdateGet}->{Functionality} } = 1;
 }
-my @ExistingFunctionalities = sort keys %ExistingFunctionalitiesTmp;
 
 my @NonExistingClasses = ( 'UnitTest::NoExistingClass1', 'UnitTest::NoExistingClass2' );
 
@@ -872,8 +866,7 @@ for my $Class (@ExistingClasses) {
 
 =for never
 
-my %FunctionalityList1;
-map { $FunctionalityList1{$_} = 1 } @ExistingFunctionalities;
+my %FunctionalityList1 = map { $_ => 1 } keys %ExistingFunctionalitiesTmp;
 
 for my $Class (@ExistingClasses) {
 
