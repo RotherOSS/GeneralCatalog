@@ -185,14 +185,14 @@ sub Param {
         $Param{Block} = 'Option';
     }
 
-    if ( $Self->{ConfigItem}->{Block} eq 'ConfigItemClassTags' ) {
-        my @Tags = values %{
+    if ( $Self->{ConfigItem}->{Block} eq 'ConfigItemClassCategories' ) {
+        my @Categories = values %{
             $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
-                Class => 'ITSM::ConfigItem::ClassTags',
+                Class => 'ITSM::ConfigItem::Class::Category',
                 Valid => 1,
             )
         };
-        $Param{Data}->%* = map { $_ => $_ } @Tags;
+        $Param{Data}->%* = map { $_ => $_ } @Categories;
         $Param{Block} = 'Option';
     }
 
