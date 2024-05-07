@@ -275,8 +275,9 @@ sub Run {
                     $ParamItem->{'Option'} = $LayoutObject->BuildSelection(
                         %{ $Preferences{$Item} },
                         %{$ParamItem},
-                        Class       => 'Modernize',
-                        Translation => 0,
+                        PossibleNone => !$ParamItem->{Mandatory},
+                        Class        => 'Modernize' . ( $ParamItem->{Mandatory} ? ' Validate_Required' : '' ),
+                        Translation  => 0,
                     );
                 }
 

@@ -58,7 +58,7 @@ sub Param {
             : $Self->{ConfigItem}->{DataSelected};
     }
 
-    for my $SelectOption (qw(PossibleNone Multiple)) {
+    for my $SelectOption (qw(Mandatory Multiple)) {
         $Param{$SelectOption} = $Self->{ConfigItem}{$SelectOption};
     }
 

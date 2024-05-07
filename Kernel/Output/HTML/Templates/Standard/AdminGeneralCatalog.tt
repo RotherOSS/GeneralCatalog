@@ -232,12 +232,21 @@
                         <div class="Clear"></div>
 [% RenderBlockEnd("TextArea") %]
 [% RenderBlockStart("Option") %]
+                        [% IF Data.Mandatory %]
+                        <label class="Mandatory" for="[% Data.Name | html %]"><span class="Marker">*</span>[% Translate(Data.Label) | html %] [% Translate(Data.Key) | html %]:<br/>
+                        </label>
+                        [% ELSE %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %] [% Translate(Data.Key) | html %]:<br/>
                         </label>
+                        [% END %]
                         <div class="Field">
                             [% Data.Option %]
                             [% IF Data.Desc %]
                             <p class="FieldExplanation">[% Translate(Data.Desc) | html %]</p>
+                            [% END %]
+                            [% IF Data.Mandatory %]
+                            <div id="[% Data.Name %]Error" class="TooltipErrorMessage" ><p>[% Translate("This field is required.") | html %]</p></div>
+                            <div id="[% Data.Name %]ServerError" class="TooltipErrorMessage"><p>[% Translate("This field is required.") | html %]</p></div>
                             [% END %]
                         </div>
                         <div class="Clear"></div>
