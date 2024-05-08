@@ -52,7 +52,7 @@ sub Data {
         'Parameter für den Beispiel-Kommentar 2 der General Katalog-Attribute.';
     $Self->{Translation}->{'Parameters for the example permission groups of the general catalog attributes.'} =
         'Parameter für die zugriffsberechtigte Gruppe der General Katalog-Attribute.';
-    $Self->{Translation}->{'Permission Group'} = 'Berechtigungsgruppe \*';
+    $Self->{Translation}->{'Permission Group'} = 'Berechtigungsgruppe';
 
 
     push @{ $Self->{JavaScriptStrings} // [] }, (
