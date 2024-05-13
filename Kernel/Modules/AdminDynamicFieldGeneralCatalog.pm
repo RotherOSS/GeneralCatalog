@@ -23,7 +23,6 @@ use namespace::autoclean;
 use utf8;
 
 # core modules
-use List::Util qw(any);
 
 # CPAN modules
 
@@ -949,7 +948,7 @@ sub _ShowScreen {
     if ($IsDirtyConfig) {
         $LayoutObject->Block(
             Name => 'DynamicFieldInSysConfigDirty',
-            ,
+
         );
     }
 

@@ -22,7 +22,7 @@ use utf8;
 # core modules
 
 # CPAN modules
-use Test2::V0;
+use Test2::V0 qw( done_testing is ok ref_ok );
 
 # OTOBO modules
 use Kernel::System::UnitTest::RegisterOM;    # Set up $Kernel::OM
