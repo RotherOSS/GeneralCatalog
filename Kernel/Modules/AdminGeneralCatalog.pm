@@ -281,7 +281,7 @@ sub Run {
                     );
                 }
 
-                if ( grep { $ParamItem->{Name} eq $_ } qw(VersionStringExpression Color Comment2) ) {
+                if ( !$ParamItem->{Multiple} ) {
                     $ParamItem->{SelectedID} = $ParamItem->{SelectedID}[0];
                 }
 
