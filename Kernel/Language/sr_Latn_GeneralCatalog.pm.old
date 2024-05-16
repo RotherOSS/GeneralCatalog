@@ -24,18 +24,18 @@ sub Data {
     my $Self = shift;
 
     # Template: AAAGeneralCatalog
-    $Self->{Translation}->{'Functionality'} = 'Funkcionalnost';
+    $Self->{Translation}->{'Functionality'} = '';
 
     # Template: AdminGeneralCatalog
-    $Self->{Translation}->{'General Catalog Management'} = 'Upravljanje Opštim katalogom';
-    $Self->{Translation}->{'Items in Class'} = 'Stavke u klasi';
-    $Self->{Translation}->{'Edit Item'} = 'Uredi stavku';
-    $Self->{Translation}->{'Add Class'} = 'Dodaj klasu';
-    $Self->{Translation}->{'Add Item'} = 'Dodaj stavku';
-    $Self->{Translation}->{'Add Catalog Item'} = 'Dodavanje stavke u katalog';
-    $Self->{Translation}->{'Add Catalog Class'} = 'Dodavanje klase u katalog';
-    $Self->{Translation}->{'Catalog Class'} = 'Katalog klasa';
-    $Self->{Translation}->{'Edit Catalog Item'} = 'Uredi stavku kataloga';
+    $Self->{Translation}->{'General Catalog Management'} = '';
+    $Self->{Translation}->{'Items in Class'} = '';
+    $Self->{Translation}->{'Edit Item'} = '';
+    $Self->{Translation}->{'Add Class'} = '';
+    $Self->{Translation}->{'Add Item'} = '';
+    $Self->{Translation}->{'Add Catalog Item'} = '';
+    $Self->{Translation}->{'Add Catalog Class'} = '';
+    $Self->{Translation}->{'Catalog Class'} = '';
+    $Self->{Translation}->{'Edit Catalog Item'} = '';
 
     # JS File: ITSM.GeneralCatalog
     $Self->{Translation}->{'Warning incident state can not be set to invalid.'} = '';
