@@ -63,7 +63,7 @@ sub Param {
     }
 
     if ( !( defined $Self->{ConfigItem}->{Block} && $Self->{ConfigItem}->{Block} ) ) {
-        $Self->{ConfigItem}->{Block} = 'Text';
+        $Self->{ConfigItem}->{Block} = 'Input';
     }
 
     if ( $Self->{ConfigItem}->{Block} eq 'Permission' ) {
