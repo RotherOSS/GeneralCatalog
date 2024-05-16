@@ -1,0 +1,194 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2019-2024 Rother OSS GmbH, https://otobo.de/
+# This file is distributed under the same license as the OTOBO Installation
+# Guide package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OTOBO Installation Guide rel-10.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-16 09:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../content/index.rst:16
+msgid "Sacrifice to Sphinx"
+msgstr ""
+
+#: ../../content/index.rst:19
+msgid "Description"
+msgstr ""
+
+#: ../../content/index.rst:20
+msgid "The General Catalog package."
+msgstr ""
+
+#: ../../content/index.rst:23
+msgid "System requirements"
+msgstr ""
+
+#: ../../content/index.rst:26
+msgid "Framework"
+msgstr ""
+
+#: ../../content/index.rst:27
+msgid "OTOBO 10.1.x"
+msgstr ""
+
+#: ../../content/index.rst:30
+msgid "Packages"
+msgstr ""
+
+#: ../../content/index.rst:31 ../../content/index.rst:35
+msgid "\\-"
+msgstr ""
+
+#: ../../content/index.rst:34
+msgid "Third-party software"
+msgstr ""
+
+#: ../../content/index.rst:38
+msgid "Usage"
+msgstr ""
+
+#: ../../content/index.rst:41
+msgid "Setup"
+msgstr ""
+
+#: ../../content/index.rst:44
+msgid "Configuration Reference"
+msgstr ""
+
+#: ../../content/index.rst:47
+msgid "Core::GeneralCatalog"
+msgstr ""
+
+#: ../../content/index.rst:50
+msgid "GeneralCatalogPreferences###Permissions"
+msgstr ""
+
+#: ../../content/index.rst:51
+msgid ""
+"Parameters for the example permission groups of the general catalog "
+"attributes."
+msgstr ""
+
+#: ../../content/index.rst:54
+msgid "GeneralCatalogPreferences###Comment2"
+msgstr ""
+
+#: ../../content/index.rst:55
+msgid "Parameters for the example comment 2 of the general catalog attributes."
+msgstr ""
+
+#: ../../content/index.rst:58
+msgid "Frontend::Admin::ModuleRegistration"
+msgstr ""
+
+#: ../../content/index.rst:61
+msgid "Frontend::Module###AdminGeneralCatalog"
+msgstr ""
+
+#: ../../content/index.rst:62
+msgid ""
+"Frontend module registration for the AdminGeneralCatalog configuration in"
+" the admin area."
+msgstr ""
+
+#: ../../content/index.rst:65
+msgid "Frontend::Admin::ModuleRegistration::AdminOverview"
+msgstr ""
+
+#: ../../content/index.rst:68
+msgid "Frontend::NavigationModule###AdminGeneralCatalog"
+msgstr ""
+
+#: ../../content/index.rst:69
+msgid "Admin area navigation for the agent interface."
+msgstr ""
+
+#: ../../content/index.rst:72
+msgid "Frontend::Admin::ModuleRegistration::Loader"
+msgstr ""
+
+#: ../../content/index.rst:75
+msgid "Loader::Module::AdminGeneralCatalog###001-GeneralCatalog"
+msgstr ""
+
+#: ../../content/index.rst:76
+msgid "Loader module registration for the agent interface."
+msgstr ""
+
+#: ../../content/index.rst:79
+msgid "Frontend::Admin::ModuleRegistration::MainMenu"
+msgstr ""
+
+#: ../../content/index.rst:82
+msgid "Frontend::Navigation###AdminGeneralCatalog###001-GeneralCatalog"
+msgstr ""
+
+#: ../../content/index.rst:83
+msgid "Main menu item registration."
+msgstr ""
+
+#: ../../content/index.rst:86
+msgid "Frontend::Base"
+msgstr ""
+
+#: ../../content/index.rst:89
+msgid "GeneralCatalog::Frontend::JSColorPickerPath"
+msgstr ""
+
+#: ../../content/index.rst:90
+msgid "Defines the URL JS Color Picker path."
+msgstr ""
+
+#: ../../content/index.rst:93
+msgid "Frontend::Base::Loader"
+msgstr ""
+
+#: ../../content/index.rst:96
+msgid "Loader::Agent::CommonJS###100-GeneralCatalog"
+msgstr ""
+
+#: ../../content/index.rst:97
+msgid "List of JS files to always be loaded for the agent interface."
+msgstr ""
+
+#: ../../content/index.rst:100
+msgid "About"
+msgstr ""
+
+#: ../../content/index.rst:103
+msgid "Contact"
+msgstr ""
+
+#: ../../content/index.rst:104
+msgid "Rother OSS GmbH"
+msgstr ""
+
+#: ../../content/index.rst:105
+msgid "Email: hello@otobo.de"
+msgstr ""
+
+#: ../../content/index.rst:106
+msgid "Web: https://otobo.de"
+msgstr ""
+
+#: ../../content/index.rst:109
+msgid "Version"
+msgstr ""
+
+#: ../../content/index.rst:110
+msgid ""
+"Author: |doc-vendor| / Version: |doc-version| / Date of release: |doc-"
+"datestamp|"
+msgstr ""
+
