@@ -90,3 +90,19 @@ msgstr ""
 msgid "Permission Group"
 msgstr ""
 
+#. Template: AdminDynamicFieldGeneralCatalog
+msgid "Filter items by class."
+msgstr ""
+
+#. Template: AdminDynamicFieldGeneralCatalog
+msgid "Set the general catalog class."
+msgstr ""
+
+#. SysConfig
+msgid "Dynamic Fields GeneralCatalog Backend GUI"
+msgstr ""
+
+#. SysConfig
+msgid "GeneralCatalog"
+msgstr ""
+

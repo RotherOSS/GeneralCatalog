@@ -2,7 +2,7 @@
 # OTOBO is a web-based ticketing system for service organisations.
 # --
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
-# Copyright (C) 2019-2024 Rother OSS GmbH, https://otobo.de/
+# Copyright (C) 2019-2021 Rother OSS GmbH, https://otobo.de/
 # --
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -26,6 +26,10 @@ sub Data {
     # Template: AAAGeneralCatalog
     $Self->{Translation}->{'Functionality'} = 'Functionalitate';
 
+    # Template: AdminDynamicFieldGeneralCatalog
+    $Self->{Translation}->{'Filter items by class.'} = '';
+    $Self->{Translation}->{'Set the general catalog class.'} = '';
+
     # Template: AdminGeneralCatalog
     $Self->{Translation}->{'General Catalog Management'} = '';
     $Self->{Translation}->{'Items in Class'} = '';
@@ -45,9 +49,11 @@ sub Data {
     $Self->{Translation}->{'Create and manage the General Catalog.'} = 'Creaza si administreaza Catalogul General.';
     $Self->{Translation}->{'Define the general catalog comment 2.'} = '';
     $Self->{Translation}->{'Defines the URL JS Color Picker path.'} = '';
+    $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = '';
     $Self->{Translation}->{'Frontend module registration for the AdminGeneralCatalog configuration in the admin area.'} =
         '';
     $Self->{Translation}->{'General Catalog'} = '';
+    $Self->{Translation}->{'GeneralCatalog'} = '';
     $Self->{Translation}->{'Parameters for the example comment 2 of the general catalog attributes.'} =
         '';
     $Self->{Translation}->{'Parameters for the example permission groups of the general catalog attributes.'} =
