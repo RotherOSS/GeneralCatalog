@@ -281,7 +281,7 @@ sub Run {
                     );
                 }
 
-                if ( !$ParamItem->{Multiple} ) {
+                if ( ref $Param{SelectedID} eq 'ARRAY' && !$ParamItem->{Multiple} ) {
                     $ParamItem->{SelectedID} = $ParamItem->{SelectedID}[0];
                 }
 
