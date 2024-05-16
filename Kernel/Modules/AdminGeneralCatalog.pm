@@ -281,15 +281,16 @@ sub Run {
                     );
                 }
 
-                if ( grep { $ParamItem->{Name} eq $_ } qw(Color Comment2) ) {
+                if ( grep { $ParamItem->{Name} eq $_ } qw(VersionStringExpression Color Comment2) ) {
                     $ParamItem->{SelectedID} = $ParamItem->{SelectedID}[0];
                 }
 
                 $LayoutObject->Block(
-                    Name => $ParamItem->{Block} || $Preferences{$Item}->{Block} || 'Option',
+                    Name => 'PreferenceItem',
                     Data => {
                         %{ $Preferences{$Item} },
                         %{$ParamItem},
+                        Type => $ParamItem->{Block} || $Preferences{$Item}->{Block} || 'Option',
                     },
                 );
             }

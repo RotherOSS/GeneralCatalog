@@ -202,14 +202,14 @@
                             <div id="NameServerError" class="TooltipErrorMessage"><p>[% Translate("This field is required.") | html %]</p></div>
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockStart("InputKey") %]
+[% RenderBlockStart("PreferenceItem") %]
+[% IF Data.Type == 'InputKey' %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %] [% Translate(Data.Key) | html %]: </label>
                         <div class="Field">
                             <input type="text" name="[% Data.Name | html %]" id="[% Data.Name | html %]" value="[% Data.SelectedID | html %]" class="W50pc" maxlength="100"/>
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("InputKey") %]
-[% RenderBlockStart("Input") %]
+[% ELSIF Data.Type == 'Input' %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %]:<br/>
                         </label>
                         <div class="Field">
@@ -219,8 +219,7 @@
                             [% END %]
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("Input") %]
-[% RenderBlockStart("TextArea") %]
+[% ELSIF Data.Type == 'TextArea' %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %]:<br/>
                         </label>
                         <div class="Field">
@@ -230,8 +229,7 @@
                             [% END %]
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("TextArea") %]
-[% RenderBlockStart("Option") %]
+[% ELSIF Data.Type == 'Option' %]
                         [% IF Data.Mandatory %]
                         <label class="Mandatory" for="[% Data.Name | html %]"><span class="Marker">*</span>[% Translate(Data.Label) | html %] [% Translate(Data.Key) | html %]:<br/>
                         </label>
@@ -250,23 +248,20 @@
                             [% END %]
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("Option") %]
-[% RenderBlockStart("Upload") %]
+[% ELSIF Data.Type == 'Upload' %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %] [% Translate(Data.Key) | html %]: </label>
                         <div class="Field">
                             <input name="[% Data.Name | html %]" id="[% Data.Name | html %]" type="file" size="30" class="fixed"/><br/>
                             <a href="">[% Data.Filename | html %]</a>
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("Upload") %]
-[% RenderBlockStart("Password") %]
+[% ELSIF Data.Type == 'Password' %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %] [% Translate(Data.Key) | html %]: </label>
                         <div class="Field">
                             <input type="password" name="[% Data.Name | html %]" id="[% Data.Name | html %]" value="" class="W50pc"/>
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("Password") %]
-[% RenderBlockStart("ColorPicker") %]
+[% ELSIF Data.Type == 'ColorPicker' %]
                         <label for="[% Data.Name | html %]">[% Translate(Data.Label) | html %]:<br/>
                         </label>
                         <div class="Field">
@@ -276,7 +271,8 @@
                             [% END %]
                         </div>
                         <div class="Clear"></div>
-[% RenderBlockEnd("ColorPicker") %]
+[% END %]
+[% RenderBlockEnd("PreferenceItem") %]
                         <label for="ValidID">[% Translate("Validity") | html %]: </label>
                         <div class="Field">
                             [% Data.ValidOptionStrg %]
