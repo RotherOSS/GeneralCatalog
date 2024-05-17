@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GeneralCatalog\n"
 "POT-Creation-Date: 2020-01-24 10:54+0000\n"
 "PO-Revision-Date: 2024-05-17 08:13+0000\n"
-"Last-Translator: Markus Hlinka <mah@rother-oss.com>\n"
+"Last-Translator: Grit Rother <mr@otobo.de>\n"
 "Language-Team: German <http://weblate.otobo.org/projects/opm-packages/"
 "itsm-generalcatalog/de/>\n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr "Funktionalität"
 
 #. Template: AdminGeneralCatalog
 msgid "General Catalog Management"
-msgstr "General Katalog-Verwaltung"
+msgstr "Verwaltung des General Catalogs"
 
 #. Template: AdminGeneralCatalog
 msgid "Items in Class"
@@ -63,11 +63,11 @@ msgstr "Kommentar 2"
 
 #. SysConfig
 msgid "Create and manage the General Catalog."
-msgstr "General Katalog erstellen und verwalten."
+msgstr "General Catalog erstellen und verwalten."
 
 #. SysConfig
 msgid "Define the general catalog comment 2."
-msgstr "Kommentar 2 für den General Katalog festlegen."
+msgstr "Kommentar 2 für den General Catalog festlegen."
 
 #. SysConfig
 msgid "Defines the URL JS Color Picker path."
@@ -83,11 +83,13 @@ msgstr "General Katalog"
 
 #. SysConfig
 msgid "Parameters for the example comment 2 of the general catalog attributes."
-msgstr "Parameter für den Beispiel-Kommentar 2 der General Katalog-Attribute."
+msgstr "Parameter für den Beispiel-Kommentar 2 der General Catalog-Attribute."
 
 #. SysConfig
 msgid "Parameters for the example permission groups of the general catalog attributes."
-msgstr "Parameter für die zugriffsberechtigte Gruppe der General-Katalog-Attribute."
+msgstr ""
+"Parameter für die zugriffsberechtigten Beispielgruppen der General Catalog-"
+"Attribute."
 
 #. SysConfig
 msgid "Permission Group"
@@ -99,15 +101,15 @@ msgstr ""
 
 #. Template: AdminDynamicFieldGeneralCatalog
 msgid "Set the general catalog class."
-msgstr ""
+msgstr "Verwalten der General Catalog-Klasse."
 
 #. SysConfig
 msgid "Dynamic Fields GeneralCatalog Backend GUI"
-msgstr ""
+msgstr "Backend-GUI für den Dynamic Fields GeneralCatalog"
 
 #. SysConfig
 msgid "GeneralCatalog"
-msgstr ""
+msgstr "GeneralCatalog"
 
 #. Template: AdminDynamicFieldGeneralCatalog
 msgid "This is the namespace in which this field will be used as prefix with the name."
