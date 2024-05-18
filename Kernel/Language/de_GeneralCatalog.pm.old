@@ -28,10 +28,10 @@ sub Data {
 
     # Template: AdminDynamicFieldGeneralCatalog
     $Self->{Translation}->{'Filter items by class.'} = '';
-    $Self->{Translation}->{'Set the general catalog class.'} = '';
+    $Self->{Translation}->{'Set the general catalog class.'} = 'Verwalten der General Catalog-Klasse.';
 
     # Template: AdminGeneralCatalog
-    $Self->{Translation}->{'General Catalog Management'} = 'General Katalog-Verwaltung';
+    $Self->{Translation}->{'General Catalog Management'} = 'Verwaltung des General Catalogs';
     $Self->{Translation}->{'Items in Class'} = 'Elemente in Klasse';
     $Self->{Translation}->{'Edit Item'} = 'Element ändern';
     $Self->{Translation}->{'Add Class'} = 'Klasse hinzufügen';
@@ -46,18 +46,18 @@ sub Data {
 
     # SysConfig
     $Self->{Translation}->{'Comment 2'} = 'Kommentar 2';
-    $Self->{Translation}->{'Create and manage the General Catalog.'} = 'General Katalog erstellen und verwalten.';
-    $Self->{Translation}->{'Define the general catalog comment 2.'} = 'Kommentar 2 für den General Katalog festlegen.';
+    $Self->{Translation}->{'Create and manage the General Catalog.'} = 'General Catalog erstellen und verwalten.';
+    $Self->{Translation}->{'Define the general catalog comment 2.'} = 'Kommentar 2 für den General Catalog festlegen.';
     $Self->{Translation}->{'Defines the URL JS Color Picker path.'} = 'Definiert die URL des JS-Farbwähler-Pfads.';
-    $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = '';
+    $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = 'Backend-GUI für den Dynamic Fields GeneralCatalog';
     $Self->{Translation}->{'Frontend module registration for the AdminGeneralCatalog configuration in the admin area.'} =
         'Registrierung des Frontend-Moduls für die Konfiguration von AdminGeneralCatalog im Admin-Bereich.';
     $Self->{Translation}->{'General Catalog'} = 'General Katalog';
-    $Self->{Translation}->{'GeneralCatalog'} = '';
+    $Self->{Translation}->{'GeneralCatalog'} = 'GeneralCatalog';
     $Self->{Translation}->{'Parameters for the example comment 2 of the general catalog attributes.'} =
-        'Parameter für den Beispiel-Kommentar 2 der General Katalog-Attribute.';
+        'Parameter für den Beispiel-Kommentar 2 der General Catalog-Attribute.';
     $Self->{Translation}->{'Parameters for the example permission groups of the general catalog attributes.'} =
-        'Parameter für die zugriffsberechtigte Gruppe der General-Katalog-Attribute.';
+        'Parameter für die zugriffsberechtigten Beispielgruppen der General Catalog-Attribute.';
     $Self->{Translation}->{'Permission Group'} = 'Berechtigungsgruppe';
 
 
