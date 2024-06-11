@@ -6,8 +6,6 @@
     :maxdepth: 2
     :caption: Contents
 
-Sacrifice to Sphinx
-===================
 
 Description
 ===========
@@ -30,6 +28,26 @@ Third-party software
 
 Usage
 =====
+
+Administrator Interface
+-----------------------
+
+Administration
+~~~~~~~~~~~~~~
+
+After installation of the package a new module will be available in the administrator interface *General Catalog*.
+
+Use this screen to add catalog classes and items to the system. If only this package is installed to the system without any OTOBO::ITSM packages, then the general catalog contains no entries. Install other OTOBO::ITSM packages (e.g., ITSM Core) to add some classes and items to the catalog. The general catalog management screen is available in the General Catalog module of the Administration group.
+
+Agent Interface
+~~~~~~~~~~~~~~~
+
+This package has no agent interface.
+
+Customer Interface
+~~~~~~~~~~~~~~~~~~
+
+This package has no customer interface.
 
 Setup
 -----
