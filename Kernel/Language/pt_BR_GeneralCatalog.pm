@@ -49,6 +49,8 @@ sub Data {
     $Self->{Translation}->{'Create and manage the General Catalog.'} = 'Criar e gerenciar o Catálogo Geral.';
     $Self->{Translation}->{'Define the general catalog comment 2.'} = 'Defina o comentário 2 do catálogo genérico.';
     $Self->{Translation}->{'Defines the URL JS Color Picker path.'} = 'Define o caminho URL JS Color Picket.';
+    $Self->{Translation}->{'Defines the initial height for the rich text editor component in pixels.'} =
+        '';
     $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = '';
     $Self->{Translation}->{'Frontend module registration for the AdminGeneralCatalog configuration in the admin area.'} =
         'Módulo de registo da interface para a configuração AdminGeneralCatalog na área administrativa.';

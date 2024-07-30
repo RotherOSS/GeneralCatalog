@@ -49,6 +49,8 @@ sub Data {
     $Self->{Translation}->{'Create and manage the General Catalog.'} = 'Tạo và quản lý danh mục chung';
     $Self->{Translation}->{'Define the general catalog comment 2.'} = '';
     $Self->{Translation}->{'Defines the URL JS Color Picker path.'} = '';
+    $Self->{Translation}->{'Defines the initial height for the rich text editor component in pixels.'} =
+        '';
     $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = '';
     $Self->{Translation}->{'Frontend module registration for the AdminGeneralCatalog configuration in the admin area.'} =
         'Đăng ký mô-đun để cấu hình AdminGeneralCatalog trong giao diện quản trị';
