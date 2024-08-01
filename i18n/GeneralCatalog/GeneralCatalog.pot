@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GeneralCatalog\n"
-"POT-Creation-Date: 2024-07-30 02:16+0000\n"
+"POT-Creation-Date: 2024-08-01 02:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,11 +75,19 @@ msgid "Define the general catalog comment 2."
 msgstr ""
 
 #. SysConfig
+msgid "Defines if parent-child translations for queues and services should be generated automatically."
+msgstr ""
+
+#. SysConfig
 msgid "Defines the URL JS Color Picker path."
 msgstr ""
 
 #. SysConfig
 msgid "Defines the initial height for the rich text editor component in pixels."
+msgstr ""
+
+#. SysConfig
+msgid "Defines the initial height in pixels for the rich text editor component for this screen."
 msgstr ""
 
 #. SysConfig

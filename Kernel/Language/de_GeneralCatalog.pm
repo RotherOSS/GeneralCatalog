@@ -48,8 +48,12 @@ sub Data {
     $Self->{Translation}->{'Comment 2'} = 'Kommentar 2';
     $Self->{Translation}->{'Create and manage the General Catalog.'} = 'General Catalog erstellen und verwalten.';
     $Self->{Translation}->{'Define the general catalog comment 2.'} = 'Kommentar 2 für den General Catalog festlegen.';
+    $Self->{Translation}->{'Defines if parent-child translations for queues and services should be generated automatically.'} =
+        '';
     $Self->{Translation}->{'Defines the URL JS Color Picker path.'} = 'Definiert die URL des JS-Farbwähler-Pfads.';
     $Self->{Translation}->{'Defines the initial height for the rich text editor component in pixels.'} =
+        '';
+    $Self->{Translation}->{'Defines the initial height in pixels for the rich text editor component for this screen.'} =
         '';
     $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = 'Backend-GUI für den Dynamic Fields GeneralCatalog';
     $Self->{Translation}->{'Frontend module registration for the AdminGeneralCatalog configuration in the admin area.'} =
