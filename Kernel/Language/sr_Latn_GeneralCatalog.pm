@@ -48,13 +48,7 @@ sub Data {
     $Self->{Translation}->{'Comment 2'} = 'Komentar 2';
     $Self->{Translation}->{'Create and manage the General Catalog.'} = 'Kreiranje i upravljanje opštim katalogom.';
     $Self->{Translation}->{'Define the general catalog comment 2.'} = 'Definiše komentar 2 u opštem katalogu.';
-    $Self->{Translation}->{'Defines if parent-child translations for queues and services should be generated automatically.'} =
-        '';
     $Self->{Translation}->{'Defines the URL JS Color Picker path.'} = 'Definiše URL putanju za JS Color Picker.';
-    $Self->{Translation}->{'Defines the initial height for the rich text editor component in pixels.'} =
-        '';
-    $Self->{Translation}->{'Defines the initial height in pixels for the rich text editor component for this screen.'} =
-        '';
     $Self->{Translation}->{'Dynamic Fields GeneralCatalog Backend GUI'} = '';
     $Self->{Translation}->{'Frontend module registration for the AdminGeneralCatalog configuration in the admin area.'} =
         'Registracija pristupnog modula za AdminGeneralCatalog u interfejsu administratora.';
