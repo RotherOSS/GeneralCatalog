@@ -174,14 +174,18 @@ sub Param {
     }
 
     if ( $Self->{ConfigItem}->{Block} eq 'ConfigItemVersionTrigger' ) {
-        my $ClassDefinition = $Kernel::OM->Get('Kernel::System::ITSMConfigItem')->DefinitionGet(
-            ClassID => $Param{GeneralCatalogData}{ItemID},
-        );
-        my %DynamicFieldNames = map { 'DynamicField_' . $_ => 'DynamicField_' . $_ } keys $ClassDefinition->{DynamicFieldRef}->%*;
-        $Param{Data} = {
-            $Self->{ConfigItem}->{Data}->%*,
-            %DynamicFieldNames,
-        };
+        if ( $Param{GeneralCatalogData}{ItemID} ne 'NEW' ) {
+            my $ClassDefinition = $Kernel::OM->Get('Kernel::System::ITSMConfigItem')->DefinitionGet(
+                ClassID => $Param{GeneralCatalogData}{ItemID},
+            );
+            my %DynamicFieldNames = map { 'DynamicField_' . $_ => 'DynamicField_' . $_ } keys $ClassDefinition->{DynamicFieldRef}->%*;
+
+            $Param{Data} = {
+                $Self->{ConfigItem}->{Data}->%*,
+                %DynamicFieldNames,
+            };
+        }
+
         $Param{Block} = 'Option';
     }
 
