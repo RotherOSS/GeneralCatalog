@@ -220,7 +220,7 @@ sub ReadableValueRender {
 
         # replace agent login with full name
         if ($Item) {
-            $Item = $ItemList->{Item};
+            $Item = $ItemList->{$Item};
         }
 
         push @ReadableValues, $Item || '';
